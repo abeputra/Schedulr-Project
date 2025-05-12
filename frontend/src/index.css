@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #f5f5f5;
+  }
+
+/* Ensure placeholder text is white */
+input::placeholder {
+  color: white !important; /* Use !important to force the color */
+  opacity: 1; /* Make sure the placeholder is fully opaque */
+}
