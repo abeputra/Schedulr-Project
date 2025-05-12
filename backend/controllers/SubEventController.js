@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Helper function untuk kirim email
-const sendAssignmentEmails = async ({ emails, subject, html }) => {
+const sendAssignmentEmails = async ({ emails, subject, html, organizer }) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -18,7 +18,7 @@ const sendAssignmentEmails = async ({ emails, subject, html }) => {
 
   for (const to of emails) {
     await transporter.sendMail({
-      from: `"Event App" <${process.env.EMAIL_SENDER}>`,
+      from: `"${organizer || "Schedulr"}" <${process.env.EMAIL_SENDER}>`,
       to,
       subject,
       html,
@@ -42,17 +42,14 @@ export const createSubEvent = async (req, res) => {
       task_or_agenda,
     } = req.body;
 
-    // Validasi input dasar
     if (!eventId || !title || !date || !time || !location) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Validasi format date dan time
     if (isNaN(Date.parse(`${date}T${time}`))) {
       return res.status(400).json({ message: "Invalid date or time format" });
     }
 
-    // Validasi assignedtasks
     if (
       assignedtasks &&
       (!Array.isArray(assignedtasks) ||
@@ -71,7 +68,6 @@ export const createSubEvent = async (req, res) => {
 
     const organizer = event.organizer;
 
-    // Ambil email user yang login dari sesi
     const createdBy = req.user?.email || null;
 
     if (!createdBy) {
@@ -99,7 +95,6 @@ export const createSubEvent = async (req, res) => {
       createdBy,
     });
 
-    // Kirim email setelah subevent berhasil dibuat
     const emailsToNotify =
       task_or_agenda === "task"
         ? assignedtasks.map((t) => t.email)
@@ -117,6 +112,7 @@ export const createSubEvent = async (req, res) => {
           <strong>Location:</strong> ${location}</p>
           <p>Check the event platform for more details.</p>
         `,
+        organizer, // ✅ Kirim organizer ke fungsi email
       });
     }
 
