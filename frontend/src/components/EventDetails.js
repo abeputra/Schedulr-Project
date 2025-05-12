@@ -1,13 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const EventDetails = () => {
-  const [eventName, setEventName] = useState('');
-  const [organizer, setOrganizer] = useState('');
-  const [description, setDescription] = useState('');
-  const [members, setMembers] = useState(['']);
+  const [eventName, setEventName] = useState("");
+  const [organizer, setOrganizer] = useState(""); // Organizer tetap bisa diubah
+  const [description, setDescription] = useState("");
+  const [members, setMembers] = useState([""]);
   const [events, setEvents] = useState([]);
+  const [eventCreatorEmail, setEventCreatorEmail] = useState(""); // State untuk email creator
   const navigate = useNavigate();
+
+  // Ambil email creator dari token JWT atau localStorage
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode token
+        const email = decodedToken.email; // Misalnya token menyimpan email
+        setEventCreatorEmail(email); // Set email creator
+      } catch (err) {
+        console.error("Error decoding token:", err);
+      }
+    }
+  }, []);
 
   const handleMemberChange = (index, value) => {
     const newMembers = [...members];
@@ -16,18 +31,18 @@ const EventDetails = () => {
   };
 
   const handleAddMember = () => {
-    setMembers([...members, '']);
+    setMembers([...members, ""]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch('http://localhost:5000/api/events', {
-        method: 'POST',
+      const res = await fetch("http://localhost:5000/api/events", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -35,20 +50,21 @@ const EventDetails = () => {
           organizer,
           description,
           invited_members: members,
+          creator_email: eventCreatorEmail, // Menyertakan email creator dalam request
         }),
       });
 
       const data = await res.json();
       if (res.ok) {
-        alert('Event created successfully');
-        setEventName('');
-        setOrganizer('');
-        setDescription('');
-        setMembers(['']);
+        alert("Event created successfully");
+        setEventName("");
+        setOrganizer("");
+        setDescription("");
+        setMembers([""]);
         fetchEvents();
-        navigate('/create'); // ✅ Redirect after successful creation
+        navigate("/create"); // ✅ Redirect after successful creation
       } else {
-        alert('Failed to create event: ' + data.message);
+        alert("Failed to create event: " + data.message);
       }
     } catch (error) {
       console.error(error);
@@ -57,27 +73,27 @@ const EventDetails = () => {
 
   const fetchEvents = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        console.warn('No token found');
+        console.warn("No token found");
         return;
       }
 
-      const res = await fetch('http://localhost:5000/api/events', {
+      const res = await fetch("http://localhost:5000/api/events", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       if (!res.ok) {
-        console.error('Failed to fetch events');
+        console.error("Failed to fetch events");
         return;
       }
 
       const data = await res.json();
       setEvents(data);
     } catch (err) {
-      console.error('Error fetching events:', err.message);
+      console.error("Error fetching events:", err.message);
     }
   };
 
@@ -87,10 +103,14 @@ const EventDetails = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="title is-3" style={{ color: '#0D1A2A' }}>Create New Event</h2>
+      <h2 className="title is-3" style={{ color: "#0D1A2A" }}>
+        Create New Event
+      </h2>
       <form onSubmit={handleSubmit}>
         <div className="field">
-          <label className="label" style={{ color: '#0D1A2A' }}>Event Name</label>
+          <label className="label" style={{ color: "#0D1A2A" }}>
+            Event Name
+          </label>
           <div className="control">
             <input
               className="input"
@@ -103,20 +123,38 @@ const EventDetails = () => {
         </div>
 
         <div className="field">
-          <label className="label" style={{ color: '#0D1A2A' }}>Organizer</label>
+          <label className="label" style={{ color: "#0D1A2A" }}>
+            Organizer
+          </label>
           <div className="control">
             <input
               className="input"
               type="text"
               value={organizer}
-              onChange={(e) => setOrganizer(e.target.value)}
+              onChange={(e) => setOrganizer(e.target.value)} // Organizer bisa diubah
               required
             />
           </div>
         </div>
 
         <div className="field">
-          <label className="label" style={{ color: '#0D1A2A' }}>Description</label>
+          <label className="label" style={{ color: "#0D1A2A" }}>
+            Event Creator (Email)
+          </label>
+          <div className="control">
+            <input
+              className="input"
+              type="email"
+              value={eventCreatorEmail} // Email creator diisi otomatis
+              readOnly
+            />
+          </div>
+        </div>
+
+        <div className="field">
+          <label className="label" style={{ color: "#0D1A2A" }}>
+            Description
+          </label>
           <div className="control">
             <textarea
               className="textarea"
@@ -128,7 +166,9 @@ const EventDetails = () => {
         </div>
 
         <div className="field">
-          <label className="label" style={{ color: '#0D1A2A' }}>Invite Members</label>
+          <label className="label" style={{ color: "#0D1A2A" }}>
+            Invite Members
+          </label>
           {members.map((member, index) => (
             <div className="control mb-2" key={index}>
               <input
@@ -158,7 +198,7 @@ const EventDetails = () => {
             <button
               type="button"
               className="button is-light ml-2"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate("/dashboard")}
             >
               Back to Dashboard
             </button>
@@ -168,9 +208,11 @@ const EventDetails = () => {
 
       <hr className="my-6" />
 
-      <h2 className="title is-4" style={{ color: '#0D1A2A' }}>Recent Event Created</h2>
+      <h2 className="title is-4" style={{ color: "#0D1A2A" }}>
+        Recent Event Created
+      </h2>
       {events.length === 0 ? (
-        <p style={{ color: '#0D1A2A' }}>You have no events.</p>
+        <p style={{ color: "#0D1A2A" }}>You have no events.</p>
       ) : (
         <div className="columns is-multiline">
           {events.map((event) => (
@@ -179,10 +221,18 @@ const EventDetails = () => {
                 <div className="card-content">
                   <p className="title is-5">{event.title}</p>
                   <p className="subtitle is-6">
-                    <strong>Organizer:</strong> {event.organizer || 'Unknown'}
+                    <strong>Organizer:</strong> {event.organizer || "Unknown"}
                   </p>
-                  <p><strong>Description:</strong> {event.description}</p>
-                  <p><strong>Members Invited:</strong> {event.invited_members?.length || 0}</p>
+                  <p>
+                    <strong>Description:</strong> {event.description}
+                  </p>
+                  <p>
+                    <strong>Members Invited:</strong>{" "}
+                    {event.invited_members?.length || 0}
+                  </p>
+                  <p>
+                    <strong>Creator:</strong> {event.creator_email || "Unknown"}
+                  </p>
                 </div>
               </div>
             </div>

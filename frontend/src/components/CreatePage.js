@@ -8,6 +8,7 @@ import {
   FaFileAlt,
   FaClipboard,
   FaSignOutAlt,
+  FaTrash,
 } from "react-icons/fa";
 import defaultProfileImage from "../assets/profile-photo-default.png";
 import { useNavigate, Link } from "react-router-dom";
@@ -86,24 +87,32 @@ const CreatePage = () => {
   const fetchEvents = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        console.warn("No token found");
-        return;
-      }
+      if (!token) return;
 
-      const res = await fetch("http://localhost:5000/api/events", {
+      const response = await fetch("http://localhost:5000/api/events", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (!res.ok) {
+      if (!response.ok) {
         console.error("Failed to fetch events");
         return;
       }
 
-      const data = await res.json();
-      setEvents(data);
+      const data = await response.json();
+
+      // Debugging data yang diterima
+      console.log("Fetched data:", data);
+
+      const parsedData = data.map((event: Event) => ({
+        ...event,
+        invited_members: Array.isArray(event.invited_members)
+          ? event.invited_members
+          : JSON.parse(event.invited_members || "[]"),
+      }));
+
+      setEvents(parsedData);
     } catch (err) {
       console.error("Error fetching events:", err.message);
     }
@@ -141,12 +150,25 @@ const CreatePage = () => {
 
       // Hapus dari state
       setEvents(events.filter((event) => event.id !== eventId));
+
       // 🔔 Tampilkan notifikasi
       window.alert("Event berhasil dihapus!");
     } catch (err) {
       console.error("Error deleting event:", err.message);
     }
   };
+
+  // Mengambil email user yang sedang login
+  const getUserEmail = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode JWT
+      return decodedToken.email;
+    }
+    return null;
+  };
+
+  const userEmail = getUserEmail();
 
   return (
     <div style={{ backgroundColor: "white", minHeight: "100vh" }}>
@@ -406,56 +428,55 @@ const CreatePage = () => {
         </Link>
       </div>
 
-      {/* Event List */}
-      <div className="container mt-5">
-        <h2 className="title is-4" style={{ color: "#0D1A2A" }}>
-          Recent Events
-        </h2>
-        {events.length === 0 ? (
-          <p style={{ color: "#0D1A2A" }}>You have no events.</p>
-        ) : (
-          <div className="columns is-multiline">
-            {events.map((event) => (
-              <div className="column is-4" key={event.id}>
-                <div
-                  className="card"
-                  style={{ position: "relative", cursor: "pointer" }}
-                >
-                  <Link
-                    to={`/subevent/${event.id}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <div className="card-content">
-                      <p className="title is-5">{event.title}</p>
-                      <p className="subtitle is-6">
-                        <strong>Organizer:</strong>{" "}
-                        {event.organizer || "Unknown"}
-                      </p>
-                      <p>
-                        <strong>Description:</strong> {event.description}
-                      </p>
-                      <p>
-                        <strong>Members Invited:</strong>{" "}
-                        {event.invited_members?.length || 0}
-                      </p>
-                    </div>
-                  </Link>
+      {/* Invited Events */}
+      <div className="mt-10">
+        <h2 className="text-xl font-semibold mb-2">Invited Events</h2>
 
-                  <button
-                    onClick={() => handleDelete(event.id)}
-                    className="button is-danger is-small"
-                    style={{
-                      position: "absolute",
-                      top: "10px",
-                      right: "10px",
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
+        {events.length === 0 ? (
+          <p className="text-gray-500">You have no invited events.</p>
+        ) : (
+          <ul className="space-y-4">
+            {events.map((event) => (
+              <li
+                key={event.id}
+                className="p-4 border rounded shadow hover:bg-gray-100 transition"
+              >
+                <Link
+                  to={`/subevent/${event.id}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <h3 className="text-lg font-semibold">{event.title}</h3>
+                  <p>
+                    <strong>Organizer:</strong> {event.organizer}
+                  </p>
+                  <p>
+                    <strong>Description:</strong> {event.description}
+                  </p>
+                  <p>
+                    <strong>Invited Members:</strong>{" "}
+                    {Array.isArray(event.invited_members)
+                      ? event.invited_members.join(", ")
+                      : "-"}
+                  </p>
+                </Link>
+                {/* Tombol Delete di luar Link */}
+                {userEmail === event.creator_email && (
+                  <div className="card-footer">
+                    <button
+                      className="button is-danger"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Mencegah klik pada tombol delete memicu navigasi
+                        handleDelete(event.id);
+                      }}
+                    >
+                      <FaTrash style={{ marginRight: "0.5rem" }} />
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </div>
     </div>

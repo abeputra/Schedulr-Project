@@ -28,6 +28,10 @@ const Event = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    creator_email: {
+      type: DataTypes.STRING, // Pastikan jenis kolom sesuai dengan email
+      allowNull: false, // Sesuaikan apakah boleh null atau tidak
+    },
   },
   {
     freezeTableName: true,

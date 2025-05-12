@@ -2,6 +2,7 @@ import Event from "../models/EventModel.js";
 import User from "../models/UserModel.js";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { Op } from "sequelize";
 
 // Load environment variables
 dotenv.config();
@@ -9,7 +10,7 @@ dotenv.config();
 // Validate email configuration
 if (!process.env.EMAIL_SENDER || !process.env.EMAIL_PASS) {
   console.error(
-    "❌ Missing EMAIL_SENDER or EMAIL_PASS in environment variables."
+    "\u274C Missing EMAIL_SENDER or EMAIL_PASS in environment variables."
   );
   process.exit(1); // Stop server if email config is missing
 }
@@ -28,6 +29,7 @@ export const createEvent = async (req, res) => {
   try {
     const { title, organizer, description, invited_members } = req.body;
     const userId = req.user.id;
+    const creatorEmail = req.user.email; // Ambil email creator dari token
 
     if (!userId) {
       return res
@@ -59,6 +61,7 @@ export const createEvent = async (req, res) => {
       description,
       invited_members,
       userId,
+      creator_email: creatorEmail, // Menambahkan email creator ke database
     });
 
     // Kirim email ke semua invited members
@@ -78,7 +81,7 @@ export const createEvent = async (req, res) => {
         });
       } catch (emailError) {
         console.error(
-          `❌ Failed to send email to ${email}:`,
+          `\u274C Failed to send email to ${email}:`,
           emailError.message
         );
       }
@@ -89,20 +92,59 @@ export const createEvent = async (req, res) => {
       event: newEvent,
     });
   } catch (error) {
-    console.error("❌ Error creating event:", error.message);
+    console.error("\u274C Error creating event:", error.message);
     res.status(500).json({ message: "Failed to create event" });
   }
 };
 
-// Mendapatkan event milik user yang sedang login
+// 🟢 GET EVENTS FOR USER
 export const getUserEvents = async (req, res) => {
   try {
     const userId = req.user.id;
-    const events = await Event.findAll({ where: { userId } });
+    const userEmail = req.user.email.toLowerCase();
 
-    res.status(200).json(events);
+    console.log("\uD83D\uDD0D User ID:", userId);
+    console.log("\uD83D\uDD0D User Email:", userEmail);
+
+    const allEvents = await Event.findAll();
+    console.log(
+      "\uD83D\uDCE6 All Events:",
+      allEvents.map((e) => ({
+        id: e.id,
+        userId: e.userId,
+        invited_members: e.invited_members,
+      }))
+    );
+
+    const filteredEvents = allEvents.filter((event) => {
+      let members = event.invited_members ?? [];
+
+      // Handle case if stored as stringified JSON
+      if (typeof members === "string") {
+        try {
+          members = JSON.parse(members);
+        } catch (e) {
+          console.warn("Invalid invited_members JSON:", members);
+          members = [];
+        }
+      }
+
+      const normalized = members.map((email) => email.toLowerCase());
+      const isOwner = event.userId === userId;
+      const isInvited = normalized.includes(userEmail);
+
+      console.log(
+        `Checking event ${event.title}: isOwner=${isOwner}, isInvited=${isInvited}`
+      );
+
+      return isOwner || isInvited;
+    });
+
+    console.log("\u2705 Filtered Events:", filteredEvents);
+
+    res.status(200).json(filteredEvents.map((event) => event.dataValues));
   } catch (error) {
-    console.error("❌ Error fetching events:", error.message);
+    console.error("\u274C Error fetching events:", error.message);
     res.status(500).json({ message: "Failed to fetch events" });
   }
 };
@@ -125,7 +167,7 @@ export const deleteEvent = async (req, res) => {
 
     res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {
-    console.error("❌ Error deleting event:", error.message);
+    console.error("\u274C Error deleting event:", error.message);
     res.status(500).json({ message: "Failed to delete event" });
   }
 };
