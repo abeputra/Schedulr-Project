@@ -9,7 +9,7 @@ import {
   FaClipboard,
   FaSignOutAlt,
   FaTrash,
-} from "react-icons/fa";
+} from "react-icons/fa"; // Importing relevant icons
 import defaultProfileImage from "../assets/profile-photo-default.png";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -172,6 +172,23 @@ const CreatePage = () => {
 
   return (
     <div style={{ backgroundColor: "white", minHeight: "100vh" }}>
+      {" "}
+      {/* Apply white background here */}
+      {/* Overlay (Dim effect) */}
+      {isSidebarOpen && (
+        <div
+          onClick={() => setIsSidebarOpen(false)} // Close the sidebar when the overlay is clicked
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent dark background
+            zIndex: 999, // Ensure the overlay is above other content
+          }}
+        ></div>
+      )}
       {/* Sidebar */}
       <div
         className={`sidebar ${isSidebarOpen ? "open" : ""}`}
@@ -179,7 +196,7 @@ const CreatePage = () => {
           position: "fixed",
           top: 0,
           left: 0,
-          width: "400px",
+          width: "400px", // Increased the width to 300px
           height: "100%",
           backgroundColor: "#0D1A2A",
           color: "white",
@@ -188,9 +205,10 @@ const CreatePage = () => {
           zIndex: 1000,
           display: "flex",
           flexDirection: "column",
-          paddingTop: "5rem",
+          paddingTop: "5rem", // Add some space at the top to avoid being too close
         }}
       >
+        {/* Logo at the top of the sidebar */}
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
           <img
             src={logo}
@@ -198,6 +216,8 @@ const CreatePage = () => {
             style={{ width: "80%", marginBottom: "1rem" }}
           />
         </div>
+
+        {/* Sidebar Menu Items with Icons */}
         <div
           style={{
             fontSize: "1.2rem",
@@ -207,6 +227,8 @@ const CreatePage = () => {
           }}
         >
           <ul style={{ paddingLeft: "5rem" }}>
+            {" "}
+            {/* Add padding-left to the ul */}
             <li style={{ marginBottom: "1.5rem" }}>
               <Link
                 to="/dashboard"
@@ -261,8 +283,7 @@ const CreatePage = () => {
           </ul>
         </div>
       </div>
-
-      {/* Navbar */}
+      {/* Main Content */}
       <nav
         className="navbar has-text-white px-5 py-2"
         role="navigation"
@@ -276,6 +297,7 @@ const CreatePage = () => {
           className="container is-flex is-align-items-center is-justify-content-space-between"
           style={{ gap: "1rem" }}
         >
+          {/* Hamburger Menu Button */}
           <div
             className="navbar-brand"
             style={{
@@ -286,20 +308,21 @@ const CreatePage = () => {
               justifyContent: "space-between",
               height: "24px",
               width: "30px",
-              transition: "0.3s",
+              transition: "0.3s", // Smooth transition for changes
             }}
-            onClick={toggleSidebar}
+            onClick={toggleSidebar} // Toggle the sidebar when clicked
           >
+            {/* Three lines for hamburger menu with animation */}
             <div
               style={{
                 width: "30px",
                 height: "4px",
                 backgroundColor: "white",
-                margin: "-0.5",
-                transition: "0.3s",
+                margin: "-0.5", // Reduced margin between lines
+                transition: "0.3s", // Transition for animation
                 transform: isMenuOpen
                   ? "rotate(90deg) translateY(8px)"
-                  : "none",
+                  : "none", // Rotate first line when clicked
               }}
             ></div>
             <div
@@ -307,9 +330,9 @@ const CreatePage = () => {
                 width: "40px",
                 height: "4px",
                 backgroundColor: "white",
-                margin: "-0.5",
-                transition: "0.3s",
-                opacity: isMenuOpen ? "0" : "1",
+                margin: "-0.5", // Reduced margin between lines
+                transition: "0.3s", // Transition for animation
+                opacity: isMenuOpen ? "0" : "1", // Hide the middle line when clicked
               }}
             ></div>
             <div
@@ -317,15 +340,16 @@ const CreatePage = () => {
                 width: "30px",
                 height: "4px",
                 backgroundColor: "white",
-                margin: "0",
-                transition: "0.3s",
+                margin: "0", // Reduced margin between lines
+                transition: "0.3s", // Transition for animation
                 transform: isMenuOpen
                   ? "rotate(-90deg) translateY(-8px)"
-                  : "none",
+                  : "none", // Rotate the third line when clicked
               }}
             ></div>
           </div>
 
+          {/* Logo */}
           <div className="navbar-brand">
             <img
               src={logo}
@@ -335,6 +359,7 @@ const CreatePage = () => {
             />
           </div>
 
+          {/* Date, Time, Timezone & Search Bar */}
           <div
             className="is-flex is-align-items-center"
             style={{
@@ -342,7 +367,7 @@ const CreatePage = () => {
               flexGrow: 1,
               justifyContent: "flex-end",
               fontWeight: 600,
-              fontSize: "clamp(0.5rem, 2vw, 1rem)",
+              fontSize: "clamp(0.5rem, 2vw, 1rem)", // Responsive font size
             }}
           >
             <div>
@@ -354,7 +379,7 @@ const CreatePage = () => {
                     marginLeft: "0.5rem",
                     fontWeight: 600,
                     color: "white",
-                    fontSize: "clamp(0.5rem, 2vw, 1rem)",
+                    fontSize: "clamp(0.5rem, 2vw, 1rem)", // Smaller but responsive
                   }}
                 >
                   ({timezone})
@@ -362,6 +387,7 @@ const CreatePage = () => {
               </div>
             </div>
 
+            {/* Search Bar */}
             <div
               className="control"
               style={{ maxWidth: "200px", width: "100%" }}
@@ -372,16 +398,17 @@ const CreatePage = () => {
                 placeholder="Search something..."
                 style={{
                   fontWeight: 400,
-                  fontSize: "clamp(0.5rem, 2vw, 1rem)",
-                  color: "white",
-                  backgroundColor: "#0D1A2A",
-                  border: "2px solid white",
+                  fontSize: "clamp(0.5rem, 2vw, 1rem)", // Responsive input font
+                  color: "white", // Set text color to white
+                  backgroundColor: "#0D1A2A", // Set background color to make input visible (optional, adjust as needed)
+                  border: "2px solid white", // Border color to make it visible
                 }}
               />
             </div>
 
+            {/* Profile Picture */}
             <a
-              href="/profile"
+              href="/profile" // Link to the profile page
               style={{
                 width: "50px",
                 height: "50px",
@@ -389,19 +416,22 @@ const CreatePage = () => {
                 overflow: "hidden",
                 border: "2px solid white",
                 marginLeft: "0rem",
-                display: "inline-block",
+                display: "inline-block", // Ensures the container behaves like a block element but doesn't disturb the layout
               }}
             >
               <img
                 src={profileImage || defaultProfileImage}
                 alt="Profile"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
               />
             </a>
           </div>
         </div>
       </nav>
-
       {/* Add Button */}
       <div
         className="is-flex is-justify-content-center is-align-items-center"
@@ -427,7 +457,6 @@ const CreatePage = () => {
           Add New
         </Link>
       </div>
-
       {/* Invited Events */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold mb-2">Invited Events</h2>
