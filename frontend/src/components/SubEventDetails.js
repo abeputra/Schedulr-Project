@@ -446,6 +446,23 @@ const SubEventDetails = () => {
                       <p>
                         <strong>Description:</strong> {subEvent.description}
                       </p>
+                      <p>
+                        <strong>Additional Description:</strong>{" "}
+                        {subEvent.additional_description}
+                      </p>
+                      <p>
+                        <strong>Date:</strong> {subEvent.date}
+                      </p>
+                      <p>
+                        <strong>Time:</strong> {subEvent.time}
+                      </p>
+                      <p>
+                        <strong>Location:</strong> {subEvent.location}
+                      </p>
+                      <p>
+                        <strong>Task or Agenda:</strong>{" "}
+                        {subEvent.task_or_agenda}
+                      </p>
                     </div>
 
                     {/* Tombol Delete yang diperbaiki */}

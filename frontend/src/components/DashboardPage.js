@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import logo from "../assets/schedulr-logo-horizontal.png";
 import {
   FaTachometerAlt,
@@ -105,6 +105,25 @@ const DashboardPage = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  // Pemisahan berdasarkan tanggal dan waktu saat ini
+  const now = new Date();
+
+  const [upcomingTasks, pastTasks] = useMemo(() => {
+    const upcoming = [];
+    const past = [];
+
+    myTasks.forEach((task) => {
+      const taskDateTime = new Date(`${task.date}T${task.time}`);
+      if (taskDateTime >= now) {
+        upcoming.push(task);
+      } else {
+        past.push(task);
+      }
+    });
+
+    return [upcoming, past];
+  }, [myTasks]);
 
   return (
     <div style={{ backgroundColor: "white", minHeight: "100vh" }}>
@@ -393,7 +412,6 @@ const DashboardPage = () => {
           Schedule Event
         </Link>
       </div>
-      {/* List My Tasks */}
       <div className="container mt-6">
         <h2
           className="title is-4 has-text-centered"
@@ -401,22 +419,83 @@ const DashboardPage = () => {
         >
           My Tasks
         </h2>
-        {myTasks.length === 0 ? (
-          <p className="has-text-centered">You have no assigned tasks.</p>
+
+        {/* === Upcoming Tasks === */}
+        {upcomingTasks.length === 0 ? (
+          <p className="has-text-centered">You have no upcoming tasks.</p>
         ) : (
           <div
             className="box"
             style={{ backgroundColor: "#0D1A2A", color: "white" }}
           >
-            {myTasks.map((task, index) => (
+            <h3 className="subtitle is-5" style={{ color: "#fff" }}>
+              Upcoming Tasks
+            </h3>
+            {upcomingTasks.map((task, index) => (
               <div
                 key={index}
                 style={{
                   padding: "1rem",
                   borderBottom:
-                    index !== myTasks.length - 1 ? "1px solid #ddd" : "none",
+                    index !== upcomingTasks.length - 1
+                      ? "1px solid #ddd"
+                      : "none",
                 }}
               >
+                {/* Render detail task seperti sebelumnya */}
+                <p>
+                  <strong>Title:</strong> {task.title}
+                </p>
+                <p>
+                  <strong>Description:</strong> {task.description}
+                </p>
+                <p>
+                  <strong>Additional Description:</strong>{" "}
+                  {task.additional_description}
+                </p>
+                <p>
+                  <strong>Organizer:</strong> {task.organizer}
+                </p>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {new Date(task.date).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Time:</strong> {task.time}
+                </p>
+                <p>
+                  <strong>Location:</strong> {task.location}
+                </p>
+                <p>
+                  <strong>Task/Agenda:</strong> {task.task_or_agenda}
+                </p>
+                <p>
+                  <strong>Task Type:</strong> {task.taskType}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* === Past Tasks === */}
+        {pastTasks.length > 0 && (
+          <div
+            className="box mt-5"
+            style={{ backgroundColor: "#f4f4f4", color: "#0D1A2A" }}
+          >
+            <h3 className="subtitle is-5" style={{ color: "#0D1A2A" }}>
+              Past Events
+            </h3>
+            {pastTasks.map((task, index) => (
+              <div
+                key={index}
+                style={{
+                  padding: "1rem",
+                  borderBottom:
+                    index !== pastTasks.length - 1 ? "1px solid #ccc" : "none",
+                }}
+              >
+                {/* Render detail task sama seperti di atas */}
                 <p>
                   <strong>Title:</strong> {task.title}
                 </p>
