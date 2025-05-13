@@ -155,6 +155,7 @@ export const deleteEvent = async (req, res) => {
     const userId = req.user.id;
     const eventId = req.params.id;
 
+    // Find the event to delete
     const event = await Event.findOne({ where: { id: eventId, userId } });
 
     if (!event) {
@@ -163,11 +164,130 @@ export const deleteEvent = async (req, res) => {
         .json({ message: "Event not found or access denied" });
     }
 
+    // Get the list of invited members before deletion
+    const { title, organizer, description, invited_members } = event;
+
+    // Delete the event
     await event.destroy();
+
+    // Send email notification to all invited members
+    for (let email of invited_members) {
+      try {
+        await transporter.sendMail({
+          from: `"${organizer}" <${process.env.EMAIL_SENDER}>`,
+          to: email,
+          subject: `The event "${title}" has been deleted`,
+          html: `
+            <h3>Hello!</h3>
+            <p>We regret to inform you that the event <strong>${title}</strong> has been deleted.</p>
+            <p><strong>Organizer:</strong> ${organizer}</p>
+            <p><strong>Description:</strong> ${description}</p>
+            <p>If you have any questions, feel free to reach out to the organizer.</p>
+          `,
+        });
+      } catch (emailError) {
+        console.error(
+          `\u274C Failed to send email to ${email}:`,
+          emailError.message
+        );
+      }
+    }
 
     res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {
     console.error("\u274C Error deleting event:", error.message);
     res.status(500).json({ message: "Failed to delete event" });
+  }
+};
+
+export const updateEvent = async (req, res) => {
+  try {
+    const event = await Event.findByPk(req.params.id); // ✅ untuk PostgreSQL
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Verifikasi kepemilikan
+    if (event.userId !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const { title, organizer, description, invited_members } = req.body;
+
+    // Identify old and new invited members
+    const oldInvitedMembers = event.invited_members ?? [];
+    const newInvitedMembers = invited_members ?? [];
+
+    // Determine newly added emails
+    const addedEmails = newInvitedMembers.filter(
+      (email) => !oldInvitedMembers.includes(email)
+    );
+
+    // Determine removed emails
+    const removedEmails = oldInvitedMembers.filter(
+      (email) => !newInvitedMembers.includes(email)
+    );
+
+    // Update the event with new data
+    await event.update({
+      title,
+      organizer,
+      description,
+      invited_members: newInvitedMembers,
+    });
+
+    // Send emails to newly added members
+    for (let email of addedEmails) {
+      try {
+        await transporter.sendMail({
+          from: `"${organizer}" <${process.env.EMAIL_SENDER}>`,
+          to: email,
+          subject: `You're invited to the event: ${title}`,
+          html: `
+            <h3>Hello!</h3>
+            <p>You have been invited to join the event <strong>${title}</strong>.</p>
+            <p><strong>Organizer:</strong> ${organizer}</p>
+            <p><strong>Description:</strong> ${description}</p>
+            <p>We hope to see you there!</p>
+          `,
+        });
+      } catch (emailError) {
+        console.error(
+          `\u274C Failed to send email to ${email}:`,
+          emailError.message
+        );
+      }
+    }
+
+    // Send emails to removed members informing them they are no longer invited
+    for (let email of removedEmails) {
+      try {
+        await transporter.sendMail({
+          from: `"${organizer}" <${process.env.EMAIL_SENDER}>`,
+          to: email,
+          subject: `You're no longer invited to the event: ${title}`,
+          html: `
+            <h3>Hello!</h3>
+            <p>We're sorry to inform you that you are no longer invited to the event <strong>${title}</strong>.</p>
+            <p><strong>Organizer:</strong> ${organizer}</p>
+            <p><strong>Description:</strong> ${description}</p>
+            <p>If you have any questions, feel free to reach out to the organizer.</p>
+          `,
+        });
+      } catch (emailError) {
+        console.error(
+          `\u274C Failed to send email to ${email}:`,
+          emailError.message
+        );
+      }
+    }
+
+    res.status(200).json(event);
+  } catch (err) {
+    console.error("Update error:", err);
+    res
+      .status(500)
+      .json({ message: "Failed to update event", error: err.message });
   }
 };

@@ -30,6 +30,15 @@ const CreatePage = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const [selectedEvent, setSelectedEvent] = useState({
+    title: "",
+    organizer: "",
+    description: "",
+    invited_members: [], // Array yang menyimpan email yang diundang
+  });
+  const [emailInput, setEmailInput] = useState(""); // Untuk input email sementara
 
   const handleProfileClick = () => {
     navigate("/profile");
@@ -169,6 +178,85 @@ const CreatePage = () => {
   };
 
   const userEmail = getUserEmail();
+
+  const openEditModal = (event) => {
+    setSelectedEvent(event);
+    setEmailInput(""); // Reset email input saat membuka modal
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSave = async () => {
+    if (!selectedEvent) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Unauthorized: Token not found");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/events/${selectedEvent.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title: selectedEvent.title,
+            organizer: selectedEvent.organizer,
+            description: selectedEvent.description,
+            invited_members: selectedEvent.invited_members,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error("Update error:", result);
+        alert(result.message || "Failed to update event");
+        return;
+      }
+
+      const updatedEvents = events.map((e) =>
+        e.id === selectedEvent.id ? result : e
+      );
+      setEvents(updatedEvents);
+      setIsEditModalOpen(false);
+      alert("Event updated successfully!");
+    } catch (err) {
+      console.error("Error updating event:", err);
+      alert("An unexpected error occurred.");
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmailInput(e.target.value);
+  };
+
+  const handleAddEmail = () => {
+    if (
+      emailInput &&
+      !selectedEvent.invited_members.includes(emailInput.trim())
+    ) {
+      setSelectedEvent({
+        ...selectedEvent,
+        invited_members: [...selectedEvent.invited_members, emailInput.trim()],
+      });
+      setEmailInput("");
+    }
+  };
+
+  const handleRemoveEmail = (email) => {
+    setSelectedEvent({
+      ...selectedEvent,
+      invited_members: selectedEvent.invited_members.filter(
+        (item) => item !== email
+      ),
+    });
+  };
 
   return (
     <div style={{ backgroundColor: "white", minHeight: "100vh" }}>
@@ -460,7 +548,6 @@ const CreatePage = () => {
       {/* Invited Events */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold mb-2">Invited Events</h2>
-
         {events.length === 0 ? (
           <p className="text-gray-500">You have no invited events.</p>
         ) : (
@@ -503,9 +590,143 @@ const CreatePage = () => {
                     </button>
                   </div>
                 )}
+                {userEmail === event.creator_email && (
+                  <>
+                    <div
+                      className="card-footer"
+                      style={{ marginTop: "0.5rem" }}
+                    >
+                      <button
+                        className="button is-warning"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEditModal(event);
+                        }}
+                      >
+                        ✏️ Edit
+                      </button>
+                    </div>
+                  </>
+                )}
               </li>
             ))}
           </ul>
+        )}
+        // Edit Modal JSX
+        {isEditModalOpen && selectedEvent && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 2000,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "white",
+                padding: "2rem",
+                borderRadius: "1rem",
+                width: "90%",
+                maxWidth: "500px",
+                boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+              }}
+            >
+              <h2 style={{ marginBottom: "1rem", fontSize: "1.25rem" }}>
+                Edit Event
+              </h2>
+              <div className="field">
+                <label className="label">Title</label>
+                <input
+                  className="input"
+                  type="text"
+                  value={selectedEvent.title}
+                  onChange={(e) =>
+                    setSelectedEvent({
+                      ...selectedEvent,
+                      title: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="field">
+                <label className="label">Organizer</label>
+                <textarea
+                  className="textarea"
+                  value={selectedEvent.organizer}
+                  onChange={(e) =>
+                    setSelectedEvent({
+                      ...selectedEvent,
+                      organizer: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="field">
+                <label className="label">Description</label>
+                <textarea
+                  className="textarea"
+                  value={selectedEvent.description}
+                  onChange={(e) =>
+                    setSelectedEvent({
+                      ...selectedEvent,
+                      description: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="field">
+                <label className="label">Invited Members (Email)</label>
+                <div className="input-group">
+                  <input
+                    className="input"
+                    type="email"
+                    value={emailInput}
+                    onChange={handleEmailChange}
+                    placeholder="Enter email"
+                  />
+                  <button
+                    className="button is-primary"
+                    onClick={handleAddEmail}
+                    disabled={!emailInput}
+                  >
+                    Add
+                  </button>
+                </div>
+                <small>Enter email address and click "Add".</small>
+              </div>
+              <ul>
+                {selectedEvent.invited_members.map((email, idx) => (
+                  <li key={idx}>
+                    {email}
+                    <button
+                      onClick={() => handleRemoveEmail(email)}
+                      style={{ marginLeft: "8px" }}
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="field is-grouped" style={{ marginTop: "1rem" }}>
+                <button className="button is-success" onClick={handleEditSave}>
+                  Save
+                </button>
+                <button
+                  className="button is-light"
+                  onClick={() => setIsEditModalOpen(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

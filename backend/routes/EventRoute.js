@@ -3,14 +3,15 @@ import {
   createEvent,
   getUserEvents,
   deleteEvent,
+  updateEvent,
 } from "../controllers/EventController.js";
 import verifyToken from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
-// Semua endpoint ini memerlukan verifikasi token
 router.post("/events", verifyToken, createEvent);
 router.get("/events", verifyToken, getUserEvents);
 router.delete("/events/:id", verifyToken, deleteEvent);
+router.put("/events/:id", verifyToken, updateEvent);
 
 export default router;
