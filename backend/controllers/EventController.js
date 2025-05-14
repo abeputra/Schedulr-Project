@@ -291,3 +291,22 @@ export const updateEvent = async (req, res) => {
       .json({ message: "Failed to update event", error: err.message });
   }
 };
+
+export const getEventById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Use Sequelize to find the event by its primary key (id)
+    const event = await Event.findByPk(id); // Find event by ID using Sequelize
+
+    // Check if event exists
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Return the event details as JSON
+    res.status(200).json(event);
+  } catch (err) {
+    console.error("Error retrieving event:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};

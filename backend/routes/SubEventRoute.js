@@ -9,6 +9,7 @@ import {
 } from "../controllers/SubEventController.js";
 
 import verifyToken from "../middleware/verifyToken.js";
+import { updateSubEvent } from "../controllers/SubEventController.js";
 
 const router = express.Router();
 
@@ -34,5 +35,8 @@ router.get("/subevents/my-tasks", verifyToken, getMySubEvents);
 router.delete("/subevents/:id", verifyToken, deleteSubEvent);
 
 router.get("/subevents/:eventId", verifyToken, getSubEventsByEventId);
+
+// backend routes (contoh)
+router.put("/subevents/detail/:id", updateSubEvent);
 
 export default router;

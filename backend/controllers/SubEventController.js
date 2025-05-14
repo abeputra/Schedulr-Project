@@ -267,3 +267,51 @@ export const getSubEventById = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const updateSubEvent = async (req, res) => {
+  const { id } = req.params; // ID dari subevent
+  const {
+    title,
+    description,
+    additional_description,
+    organizer,
+    date,
+    time,
+    location,
+    task_or_agenda,
+    assignedtasks,
+    assignedmembers,
+  } = req.body; // Data yang akan diupdate
+
+  try {
+    // Ganti findById dengan findByPk untuk Sequelize
+    const subEvent = await SubEvent.findByPk(id);
+
+    if (!subEvent) {
+      return res.status(404).json({ message: "Sub-event not found" });
+    }
+
+    // Update fields
+    subEvent.title = title;
+    subEvent.description = description;
+    subEvent.additional_description = additional_description;
+    subEvent.organizer = organizer;
+    subEvent.date = date;
+    subEvent.time = time;
+    subEvent.location = location;
+    subEvent.task_or_agenda = task_or_agenda;
+    subEvent.assignedtasks = assignedtasks;
+    subEvent.assignedmembers = assignedmembers;
+
+    // Simpan perubahan
+    const updated = await subEvent.save();
+
+    // Kirim response dengan data yang sudah diupdate
+    res.status(200).json(updated);
+  } catch (err) {
+    console.error("Update error:", err);
+    res
+      .status(500)
+      .json({ message: "Server error during update", error: err.message });
+  }
+};
