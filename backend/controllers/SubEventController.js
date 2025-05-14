@@ -208,6 +208,7 @@ export const getMySubEvents = async (req, res) => {
       );
 
       return {
+        id: subEvent.id,
         title: subEvent.title,
         eventName: subEvent.Event?.title || "Unknown Event",
         description: subEvent.description,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import logo from "../assets/schedulr-logo-horizontal.png";
+import backgroundMotif from "../assets/background-motif.png";
 import {
   FaTachometerAlt,
   FaPlus,
@@ -8,19 +9,20 @@ import {
   FaFileAlt,
   FaClipboard,
   FaSignOutAlt,
-} from "react-icons/fa"; // Importing relevant icons
+} from "react-icons/fa";
 import defaultProfileImage from "../assets/profile-photo-default.png";
-import { useNavigate, Link } from "react-router-dom"; // Import Link from react-router-dom
+import { useNavigate, Link } from "react-router-dom";
 
 const DashboardPage = () => {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [timezone, setTimezone] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for toggling the hamburger animation
-  const [profileImage, setProfileImage] = useState(null); // State for the user's profile image
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
   const [myTasks, setMyTasks] = useState([]);
+  const [subEventDetails, setSubEventDetails] = useState(null); // State untuk subEvent details
 
   const handleProfileClick = () => {
     navigate("/profile"); // Navigate to the profile page
@@ -29,7 +31,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchUserSubEvents = async () => {
       try {
-        const token = localStorage.getItem("token"); // Ambil token dari localStorage
+        const token = localStorage.getItem("token");
 
         const response = await fetch(
           "http://localhost:5000/api/subevents/my-tasks",
@@ -45,8 +47,14 @@ const DashboardPage = () => {
         }
 
         const data = await response.json();
-        console.log("My sub-events:", data);
-        setMyTasks(data); // Menyimpan data ke state myTasks
+
+        // Format ulang jika backend hanya kirim _id
+        const formatted = data.map((item) => ({
+          ...item,
+          subeventId: item._id,
+        }));
+
+        setMyTasks(formatted);
       } catch (error) {
         console.error("Failed to fetch sub-events:", error);
       }
@@ -82,31 +90,36 @@ const DashboardPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Function to toggle the sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
     setIsMenuOpen(!isMenuOpen); // Toggle hamburger icon animation
   };
 
-  // Close the sidebar if clicked outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        !event.target.closest(".sidebar") &&
-        !event.target.closest(".navbar-brand")
-      ) {
-        setIsSidebarOpen(false);
-        setIsMenuOpen(false);
+  // Fetch sub-event details for a specific sub-event when clicked
+  const fetchSubEventDetail = async (subEventId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        `http://localhost:5000/api/subevents/detail/${subEventId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch sub-event detail");
       }
-    };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+      const data = await response.json();
+      setSubEventDetails(data); // Set the sub-event details in state
+    } catch (error) {
+      console.error("Error fetching sub-event detail:", error);
+    }
+  };
 
-  // Pemisahan berdasarkan tanggal dan waktu saat ini
   const now = new Date();
 
   const [upcomingTasks, pastTasks] = useMemo(() => {
@@ -126,7 +139,15 @@ const DashboardPage = () => {
   }, [myTasks]);
 
   return (
-    <div style={{ backgroundColor: "white", minHeight: "100vh" }}>
+    <div
+      style={{
+        backgroundImage: `url(${backgroundMotif})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+      }}
+    >
       {" "}
       {/* Apply white background here */}
       {/* Overlay (Dim effect) */}
@@ -318,7 +339,7 @@ const DashboardPage = () => {
           <div
             className="is-flex is-align-items-center"
             style={{
-              gap: "1.5rem",
+              gap: "1rem",
               flexGrow: 1,
               justifyContent: "flex-end",
               fontWeight: 600,
@@ -326,12 +347,13 @@ const DashboardPage = () => {
             }}
           >
             <div>
-              <div style={{ paddingLeft: "1.3rem" }}>{date}</div>
+              <div style={{ paddingLeft: "0rem" }}>{date}</div>
               <div>
                 {time}
                 <span
                   style={{
-                    marginLeft: "0.5rem",
+                    paddingRight: "2rem",
+                    marginLeft: "1rem",
                     fontWeight: 600,
                     color: "white",
                     fontSize: "clamp(0.5rem, 2vw, 1rem)", // Smaller but responsive
@@ -388,148 +410,198 @@ const DashboardPage = () => {
         </div>
       </nav>
       {/* Tombol Schedule Event */}
+      <h2
+        className="title is-4"
+        style={{
+          color: "#0D1A2A",
+          marginTop: "5rem",
+          fontFamily: "'Poppins', sans-serif",
+          fontWeight: 700,
+          fontSize: "2rem", // misalnya 2rem = 32px
+          marginLeft: "16rem",
+        }}
+      >
+        Recent Events
+      </h2>
       <div
-        className="is-flex is-justify-content-center is-align-items-center"
-        style={{ marginTop: "4rem" }}
+        className="is-flex"
+        style={{ marginLeft: "16rem", marginTop: "0.5rem" }}
       >
         <Link
           to="/create"
           style={{
-            backgroundColor: "#007BFF",
+            backgroundColor: "#0D1A2A",
             color: "white",
-            padding: "2rem 3rem",
-            borderRadius: "1rem",
-            fontWeight: "bold",
-            fontSize: "1.5rem",
+            padding: "4rem 3rem",
+            borderRadius: "1.5rem",
+            fontWeight: "700",
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "2rem",
             display: "flex",
             alignItems: "center",
-            gap: "1rem",
-            boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+            gap: "0.75rem",
+            boxShadow: "0 8px 10px rgba(0, 0, 0, 0.2)",
             textDecoration: "none",
+            transition: "all 0.3s ease",
           }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.backgroundColor = "#0E3360")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.backgroundColor = "#0D1A2A")
+          }
         >
           <FaPlus size={24} />
-          Schedule Event
+          Schedule New Event
         </Link>
       </div>
-      <div className="container mt-6">
-        <h2
-          className="title is-4 has-text-centered"
-          style={{ color: "#0D1A2A" }}
-        >
-          My Tasks
-        </h2>
-
-        {/* === Upcoming Tasks === */}
-        {upcomingTasks.length === 0 ? (
-          <p className="has-text-centered">You have no upcoming tasks.</p>
-        ) : (
-          <div
-            className="box"
-            style={{ backgroundColor: "#0D1A2A", color: "white" }}
+      {/* === Upcoming Tasks === */}
+      {upcomingTasks.length === 0 ? (
+        <p className="has-text-centered has-text-grey-light">
+          You have no upcoming tasks.
+        </p>
+      ) : (
+        <>
+          <h2
+            className="title is-4"
+            style={{
+              marginLeft: "16rem",
+              marginTop: "4rem",
+              color: "#0D1A2A",
+              marginBottom: "2rem",
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 700,
+              fontSize: "2rem", // misalnya 2rem = 32px
+            }}
           >
-            <h3 className="subtitle is-5" style={{ color: "#fff" }}>
-              Upcoming Tasks
-            </h3>
+            Upcoming Task or Agenda
+          </h2>
+          <div className="columns is-multiline">
             {upcomingTasks.map((task, index) => (
               <div
                 key={index}
-                style={{
-                  padding: "1rem",
-                  borderBottom:
-                    index !== upcomingTasks.length - 1
-                      ? "1px solid #ddd"
-                      : "none",
-                }}
+                className="column is-full-mobile is-half-tablet is-one-third-desktop"
               >
-                {/* Render detail task seperti sebelumnya */}
-                <p>
-                  <strong>Title:</strong> {task.title}
-                </p>
-                <p>
-                  <strong>Description:</strong> {task.description}
-                </p>
-                <p>
-                  <strong>Additional Description:</strong>{" "}
-                  {task.additional_description}
-                </p>
-                <p>
-                  <strong>Organizer:</strong> {task.organizer}
-                </p>
-                <p>
-                  <strong>Date:</strong>{" "}
-                  {new Date(task.date).toLocaleDateString()}
-                </p>
-                <p>
-                  <strong>Time:</strong> {task.time}
-                </p>
-                <p>
-                  <strong>Location:</strong> {task.location}
-                </p>
-                <p>
-                  <strong>Task/Agenda:</strong> {task.task_or_agenda}
-                </p>
-                <p>
-                  <strong>Task Type:</strong> {task.taskType}
-                </p>
+                <Link
+                  to={`/subevents/detail/${task.id}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <div
+                    className="box"
+                    style={{
+                      backgroundColor: "#0D1A2A",
+                      color: "white",
+                      borderRadius: "1rem",
+                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      padding: "1.5rem",
+                      gap: "1.5rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <p>
+                        <strong>ID:</strong> {task.id}
+                      </p>
+                      <p>
+                        <strong>Title:</strong> {task.title}
+                      </p>
+                      <p>
+                        <strong>Description:</strong> {task.description}
+                      </p>
+                      <p>
+                        <strong>Additional Description:</strong>{" "}
+                        {task.additional_description}
+                      </p>
+                      <p>
+                        <strong>Organizer:</strong> {task.organizer}
+                      </p>
+                      <p>
+                        <strong>Task/Agenda:</strong> {task.task_or_agenda}
+                      </p>
+                      <p>
+                        <strong>Task Type:</strong> {task.taskType}
+                      </p>
+                    </div>
+                    <div style={{ flex: 0.6, textAlign: "right" }}>
+                      <p>
+                        <strong>Date:</strong>{" "}
+                        {new Date(task.date).toLocaleDateString()}
+                      </p>
+                      <p>
+                        <strong>Time:</strong> {task.time}
+                      </p>
+                      <p>
+                        <strong>Location:</strong> {task.location}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
               </div>
             ))}
           </div>
-        )}
-
-        {/* === Past Tasks === */}
-        {pastTasks.length > 0 && (
-          <div
-            className="box mt-5"
-            style={{ backgroundColor: "#f4f4f4", color: "#0D1A2A" }}
-          >
-            <h3 className="subtitle is-5" style={{ color: "#0D1A2A" }}>
-              Past Events
-            </h3>
+        </>
+      )}
+      {/* === Past Tasks === */}
+      {pastTasks.length > 0 && (
+        <>
+          <h3 className="subtitle is-5 mb-4 mt-6" style={{ color: "#0D1A2A" }}>
+            Past Events
+          </h3>
+          <div className="columns is-multiline">
             {pastTasks.map((task, index) => (
               <div
                 key={index}
-                style={{
-                  padding: "1rem",
-                  borderBottom:
-                    index !== pastTasks.length - 1 ? "1px solid #ccc" : "none",
-                }}
+                className="column is-full-mobile is-half-tablet is-one-third-desktop"
               >
-                {/* Render detail task sama seperti di atas */}
-                <p>
-                  <strong>Title:</strong> {task.title}
-                </p>
-                <p>
-                  <strong>Description:</strong> {task.description}
-                </p>
-                <p>
-                  <strong>Additional Description:</strong>{" "}
-                  {task.additional_description}
-                </p>
-                <p>
-                  <strong>Organizer:</strong> {task.organizer}
-                </p>
-                <p>
-                  <strong>Date:</strong>{" "}
-                  {new Date(task.date).toLocaleDateString()}
-                </p>
-                <p>
-                  <strong>Time:</strong> {task.time}
-                </p>
-                <p>
-                  <strong>Location:</strong> {task.location}
-                </p>
-                <p>
-                  <strong>Task/Agenda:</strong> {task.task_or_agenda}
-                </p>
-                <p>
-                  <strong>Task Type:</strong> {task.taskType}
-                </p>
+                <div
+                  className="box"
+                  style={{
+                    backgroundColor: "#F9FAFB",
+                    color: "#0D1A2A",
+                    borderRadius: "1rem",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+                    height: "100%",
+                  }}
+                >
+                  <p>
+                    <strong>Title:</strong> {task.title}
+                  </p>
+                  <p>
+                    <strong>Description:</strong> {task.description}
+                  </p>
+                  <p>
+                    <strong>Additional Description:</strong>{" "}
+                    {task.additional_description}
+                  </p>
+                  <p>
+                    <strong>Organizer:</strong> {task.organizer}
+                  </p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {new Date(task.date).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <strong>Time:</strong> {task.time}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {task.location}
+                  </p>
+                  <p>
+                    <strong>Task/Agenda:</strong> {task.task_or_agenda}
+                  </p>
+                  <p>
+                    <strong>Task Type:</strong> {task.taskType}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 };
