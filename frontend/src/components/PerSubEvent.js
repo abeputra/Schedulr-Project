@@ -172,15 +172,23 @@ const PerSubEvent = () => {
       );
 
       if (!res.ok) {
-        const errorData = await res.json(); // Hanya membaca response.json() sekali
+        const errorData = await res.json();
         console.error("Update failed:", errorData.message);
+        alert("Gagal memperbarui sub-event.");
         return;
       }
 
-      const updatedSubEvent = await res.json(); // Ambil data setelah request berhasil
+      const updatedSubEvent = await res.json();
       console.log("Sub-event updated:", updatedSubEvent);
+
+      // ✅ Beri notifikasi sukses
+      alert("Data berhasil diperbarui!");
+
+      // ✅ Refresh halaman
+      window.location.reload();
     } catch (err) {
       console.error("Error while saving changes:", err);
+      alert("Terjadi kesalahan saat menyimpan perubahan.");
     }
   };
 
