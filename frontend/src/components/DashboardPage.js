@@ -433,7 +433,7 @@ const DashboardPage = () => {
             backgroundColor: "#0D1A2A",
             color: "white",
             padding: "4rem 3rem",
-            borderRadius: "1.5rem",
+            borderRadius: "1.2rem",
             fontWeight: "700",
             fontFamily: "'Poppins', sans-serif",
             fontSize: "2rem",
@@ -468,74 +468,185 @@ const DashboardPage = () => {
               marginLeft: "16rem",
               marginTop: "4rem",
               color: "#0D1A2A",
-              marginBottom: "2rem",
+              marginBottom: "1.5rem",
               fontFamily: "'Poppins', sans-serif",
               fontWeight: 700,
               fontSize: "2rem", // misalnya 2rem = 32px
             }}
           >
-            Upcoming Task or Agenda
+            Upcoming Events
           </h2>
-          <div className="columns is-multiline">
+          <div
+            className="columns is-multiline"
+            style={{ marginLeft: "15.4rem", marginRight: "15.4rem" }}
+          >
             {upcomingTasks.map((task, index) => (
               <div
                 key={index}
-                className="column is-full-mobile is-half-tablet is-one-third-desktop"
+                className="column is-full" // Memastikan setiap task mengambil 1 baris penuh
+                style={{ marginBottom: "0rem" }} // Jarak antar kolom jika diperlukan
               >
                 <Link
                   to={`/subevents/detail/${task.id}`}
                   style={{ textDecoration: "none" }}
                 >
                   <div
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#0E3360")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#0D1A2A")
+                    }
                     className="box"
                     style={{
                       backgroundColor: "#0D1A2A",
                       color: "white",
                       borderRadius: "1rem",
-                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                      boxShadow: "0 8px 10px rgba(0, 0, 0, 0.2)",
                       height: "100%",
                       display: "flex",
                       flexDirection: "row",
                       justifyContent: "space-between",
                       padding: "1.5rem",
-                      gap: "1.5rem",
+                      gap: "1rem",
                       cursor: "pointer",
+                      paddingTop: "1.5rem",
+                      transition: "all 0.3s ease",
                     }}
                   >
                     <div style={{ flex: 1 }}>
-                      <p>
-                        <strong>ID:</strong> {task.id}
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif", // Menetapkan jenis font Poppins
+                          fontSize: "1.5rem", // Ukuran font
+                          fontWeight: "700", // Ketebalan font
+                          marginBottom: "0.5rem", // Jarak bawah antar elemen
+                          letterSpacing: "0.05em", // Jarak antar huruf
+                        }}
+                      >
+                        {task.title}
                       </p>
-                      <p>
-                        <strong>Title:</strong> {task.title}
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: "1rem",
+                          fontWeight: "600",
+                          letterSpacing: "0.02em",
+                          marginBottom: "0.5rem",
+                          display: "flex", // Flexbox untuk menjaga agar tetap satu baris
+                          alignItems: "center", // Vertikal tengah jika ada perbedaan tinggi
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menebalkan label
+                            marginRight: "0rem", // Memberikan jarak antara "Description" dan nilai deskripsi
+                            marginLeft: "0rem",
+                          }}
+                        ></span>
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menjaga agar nilai deskripsi tidak terlalu tebal
+                            marginRight: "0.5rem", // Jarak antara Description dan Additional Description
+                            marginLeft: "0rem",
+                            color: "#F38B40",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {task.description}
+                        </span>
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menebalkan label Additional Description
+                            marginRight: "0.5rem", // Memberikan jarak antara "Additional Description" dan nilai deskripsi
+                            color: "#F38B40",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          -
+                        </span>
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            color: "#F38B40",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {task.additional_description}
+                        </span>
                       </p>
-                      <p>
-                        <strong>Description:</strong> {task.description}
-                      </p>
-                      <p>
-                        <strong>Additional Description:</strong>{" "}
-                        {task.additional_description}
-                      </p>
-                      <p>
-                        <strong>Organizer:</strong> {task.organizer}
-                      </p>
-                      <p>
-                        <strong>Task/Agenda:</strong> {task.task_or_agenda}
-                      </p>
-                      <p>
-                        <strong>Task Type:</strong> {task.taskType}
+
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif", // Menetapkan jenis font Poppins
+                          fontWeight: "normal",
+                          fontSize: "1rem", // Ukuran font
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em", // Jarak antar huruf
+                        }}
+                      >
+                        Organized by {task.organizer}
                       </p>
                     </div>
                     <div style={{ flex: 0.6, textAlign: "right" }}>
-                      <p>
-                        <strong>Date:</strong>{" "}
-                        {new Date(task.date).toLocaleDateString()}
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: "1rem",
+                          fontWeight: "600",
+                          letterSpacing: "0.02em",
+                          paddingTop: "1rem",
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menjaga agar nilai deskripsi tidak terlalu tebal
+                            marginRight: "0.5rem", // Jarak antara Description dan Additional Description
+                            marginLeft: "0rem",
+                            color: "#FFFFFF",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {new Date(task.date).toLocaleDateString()}
+                        </span>
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menebalkan label Additional Description
+                            marginRight: "0.5rem", // Memberikan jarak antara "Additional Description" dan nilai deskripsi
+                            color: "#FFFFFF",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          -
+                        </span>
+                        <span>
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              marginRight: "0rem",
+                              marginLeft: "0rem",
+                              color: "#FFFFFF",
+                              fontSize: "1.2rem",
+                            }}
+                          >
+                            {task.time}
+                          </span>
+                        </span>
                       </p>
-                      <p>
-                        <strong>Time:</strong> {task.time}
-                      </p>
-                      <p>
-                        <strong>Location:</strong> {task.location}
+
+                      <p
+                        style={{
+                          paddingTop: "1rem",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: "1.2rem",
+                          fontWeight: "600",
+                          letterSpacing: "0.02em",
+                        }}
+                      >
+                        <span style={{ color: "#FFFFFF" }}>Location:</span>{" "}
+                        <span style={{ color: "#F38B40" }}>
+                          {task.location}
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -548,58 +659,202 @@ const DashboardPage = () => {
       {/* === Past Tasks === */}
       {pastTasks.length > 0 && (
         <>
-          <h3 className="subtitle is-5 mb-4 mt-6" style={{ color: "#0D1A2A" }}>
+          <h2
+            className="title is-4"
+            style={{
+              marginLeft: "16rem",
+              marginTop: "4rem",
+              color: "#0D1A2A",
+              marginBottom: "1.5rem",
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 700,
+              fontSize: "2rem", // misalnya 2rem = 32px
+            }}
+          >
             Past Events
-          </h3>
-          <div className="columns is-multiline">
+          </h2>
+          <div
+            className="columns is-multiline"
+            style={{
+              marginLeft: "15.4rem",
+              marginRight: "15.4rem",
+            }}
+          >
             {pastTasks.map((task, index) => (
               <div
                 key={index}
-                className="column is-full-mobile is-half-tablet is-one-third-desktop"
+                className="column is-full" // Memastikan setiap task mengambil 1 baris penuh
+                style={{ marginBottom: "0rem" }} // Jarak antar kolom jika diperlukan
               >
-                <div
-                  className="box"
-                  style={{
-                    backgroundColor: "#F9FAFB",
-                    color: "#0D1A2A",
-                    borderRadius: "1rem",
-                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
-                    height: "100%",
-                  }}
+                <Link
+                  to={`/subevents/detail/${task.id}`}
+                  style={{ textDecoration: "none" }}
                 >
-                  <p>
-                    <strong>Title:</strong> {task.title}
-                  </p>
-                  <p>
-                    <strong>Description:</strong> {task.description}
-                  </p>
-                  <p>
-                    <strong>Additional Description:</strong>{" "}
-                    {task.additional_description}
-                  </p>
-                  <p>
-                    <strong>Organizer:</strong> {task.organizer}
-                  </p>
-                  <p>
-                    <strong>Date:</strong>{" "}
-                    {new Date(task.date).toLocaleDateString()}
-                  </p>
-                  <p>
-                    <strong>Time:</strong> {task.time}
-                  </p>
-                  <p>
-                    <strong>Location:</strong> {task.location}
-                  </p>
-                  <p>
-                    <strong>Task/Agenda:</strong> {task.task_or_agenda}
-                  </p>
-                  <p>
-                    <strong>Task Type:</strong> {task.taskType}
-                  </p>
-                </div>
+                  <div
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#0E3360")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#0D1A2A")
+                    }
+                    className="box"
+                    style={{
+                      backgroundColor: "#0D1A2A",
+                      color: "white",
+                      borderRadius: "1rem",
+                      boxShadow: "0 8px 10px rgba(0, 0, 0, 0.2)",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      padding: "1.5rem",
+                      gap: "1rem",
+                      cursor: "pointer",
+                      paddingTop: "1.5rem",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif", // Menetapkan jenis font Poppins
+                          fontSize: "1.5rem", // Ukuran font
+                          fontWeight: "700", // Ketebalan font
+                          marginBottom: "0.5rem", // Jarak bawah antar elemen
+                          letterSpacing: "0.05em", // Jarak antar huruf
+                        }}
+                      >
+                        {task.title}
+                      </p>
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: "1rem",
+                          fontWeight: "600",
+                          letterSpacing: "0.02em",
+                          marginBottom: "0.5rem",
+                          display: "flex", // Flexbox untuk menjaga agar tetap satu baris
+                          alignItems: "center", // Vertikal tengah jika ada perbedaan tinggi
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menebalkan label
+                            marginRight: "0rem", // Memberikan jarak antara "Description" dan nilai deskripsi
+                            marginLeft: "0rem",
+                          }}
+                        ></span>
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menjaga agar nilai deskripsi tidak terlalu tebal
+                            marginRight: "0.5rem", // Jarak antara Description dan Additional Description
+                            marginLeft: "0rem",
+                            color: "#F38B40",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {task.description}
+                        </span>
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menebalkan label Additional Description
+                            marginRight: "0.5rem", // Memberikan jarak antara "Additional Description" dan nilai deskripsi
+                            color: "#F38B40",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          -
+                        </span>
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            color: "#F38B40",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {task.additional_description}
+                        </span>
+                      </p>
+
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif", // Menetapkan jenis font Poppins
+                          fontWeight: "normal",
+                          fontSize: "1rem", // Ukuran font
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em", // Jarak antar huruf
+                        }}
+                      >
+                        Organized by {task.organizer}
+                      </p>
+                    </div>
+                    <div style={{ flex: 0.6, textAlign: "right" }}>
+                      <p
+                        style={{
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: "1rem",
+                          fontWeight: "600",
+                          letterSpacing: "0.02em",
+                          paddingTop: "1rem",
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menjaga agar nilai deskripsi tidak terlalu tebal
+                            marginRight: "0.5rem", // Jarak antara Description dan Additional Description
+                            marginLeft: "0rem",
+                            color: "#FFFFFF",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          {new Date(task.date).toLocaleDateString()}
+                        </span>
+                        <span
+                          style={{
+                            fontWeight: "bold", // Menebalkan label Additional Description
+                            marginRight: "0.5rem", // Memberikan jarak antara "Additional Description" dan nilai deskripsi
+                            color: "#FFFFFF",
+                            fontSize: "1.1rem",
+                          }}
+                        >
+                          -
+                        </span>
+                        <span>
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              marginRight: "0rem",
+                              marginLeft: "0rem",
+                              color: "#FFFFFF",
+                              fontSize: "1.2rem",
+                            }}
+                          >
+                            {task.time}
+                          </span>
+                        </span>
+                      </p>
+
+                      <p
+                        style={{
+                          paddingTop: "1rem",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontSize: "1.2rem",
+                          fontWeight: "600",
+                          letterSpacing: "0.02em",
+                        }}
+                      >
+                        <span style={{ color: "#FFFFFF" }}>Location:</span>{" "}
+                        <span style={{ color: "#F38B40" }}>
+                          {task.location}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </Link>
               </div>
             ))}
           </div>
+          <div style={{ paddingBottom: "5rem" }}></div>
         </>
       )}
     </div>
