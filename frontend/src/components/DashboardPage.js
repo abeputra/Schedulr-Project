@@ -457,8 +457,19 @@ const DashboardPage = () => {
       </div>
       {/* === Upcoming Tasks === */}
       {upcomingTasks.length === 0 ? (
-        <p className="has-text-centered has-text-grey-light">
-          You have no upcoming tasks.
+        <p
+          className="title is-4"
+          style={{
+            marginLeft: "16rem",
+            marginTop: "4rem",
+            color: "#0D1A2A",
+            marginBottom: "1.5rem",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 700,
+            fontSize: "2rem", // misalnya 2rem = 32px
+          }}
+        >
+          No upcoming tasks
         </p>
       ) : (
         <>

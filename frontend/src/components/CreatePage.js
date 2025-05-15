@@ -605,6 +605,11 @@ const CreatePage = () => {
             >
               <div
                 className="box"
+                style={{
+                  backgroundColor: "#0D1A2A",
+                  color: "white",
+                  transition: "all 0.3s ease",
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = "#0E3360";
                 }}
@@ -616,39 +621,160 @@ const CreatePage = () => {
                   to={`/subevent/${event.id}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <h3 className="title is-5">{event.title}</h3>
-                  <p>
-                    <strong>Organizer:</strong> {event.organizer}
+                  <h3
+                    style={{
+                      fontSize: "1.5rem",
+                      fontFamily: "Poppins, sans-serif",
+                      fontWeight: "bold",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    {event.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontFamily: "Poppins, sans-serif",
+                      fontWeight: "normal",
+                      marginBottom: "0.3rem",
+                    }}
+                  >
+                    Organized by {event.organizer}
                   </p>
-                  <p>
-                    <strong>Description:</strong> {event.description}
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontFamily: "Poppins, sans-serif",
+                      fontWeight: "normal",
+                      marginBottom: "0.3rem",
+                    }}
+                  >
+                    Description
+                    <span style={{ marginLeft: "3.7rem" }}>
+                      : {event.description}
+                    </span>
                   </p>
                 </Link>
 
-                <p>
-                  <strong>Invited Members:</strong>{" "}
-                  {Array.isArray(event.invited_members)
-                    ? event.invited_members.length
-                    : 0}
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    fontFamily: "Poppins, sans-serif",
+                    fontWeight: "normal",
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  Invited Members
+                  <span style={{ marginLeft: "1rem" }}>
+                    :{" "}
+                    {Array.isArray(event.invited_members)
+                      ? event.invited_members.length
+                      : 0}
+                  </span>
                 </p>
 
-                {Array.isArray(event.invited_members) &&
-                  event.invited_members.length > 0 && (
-                    <div className="card-footer mt-2">
+                {/* Tombol aksi */}
+                <div
+                  className="buttons mt-3 is-flex is-justify-content-start"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: "0.5rem",
+                    flexWrap: "wrap",
+                    width: "100%",
+                  }}
+                >
+                  {Array.isArray(event.invited_members) &&
+                    event.invited_members.length > 0 && (
                       <button
-                        className="button is-info"
+                        className="button"
+                        style={{
+                          backgroundColor: "#FFFFFF",
+                          flex: 0.3,
+                          marginRight: "1rem",
+                          fontSize: "1rem",
+                          fontFamily: "Poppins, sans-serif",
+                          fontWeight: "bold",
+                          color: "#000000",
+                        }}
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           setModalEvent(event);
                           setShowModal(true);
                         }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#888888";
+                          e.currentTarget.style.color = "#FFFFFF"; // kembali ke putih
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#FFFFFF";
+                          e.currentTarget.style.color = "#000000"; // misalnya jadi kuning saat hover
+                        }}
                       >
-                        👁️ View
+                        View
                       </button>
-                    </div>
-                  )}
+                    )}
 
+                  {userEmail === event.creator_email && (
+                    <>
+                      <button
+                        className="button"
+                        style={{
+                          backgroundColor: "#A80000",
+                          flex: 0.3,
+                          marginLeft: "1rem",
+                          fontSize: "1rem",
+                          fontFamily: "Poppins, sans-serif",
+                          fontWeight: "bold",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(event.id);
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#DB0101";
+                          e.currentTarget.style.color = "#000000"; // misalnya jadi kuning saat hover
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#A80000";
+                          e.currentTarget.style.color = "#FFFFFF"; // kembali ke putih
+                        }}
+                      >
+                        <FaTrash style={{ marginRight: "auto" }} />
+                        Delete
+                      </button>
+
+                      <button
+                        className="button"
+                        style={{
+                          backgroundColor: "#FFC800",
+                          flex: 0.3,
+                          marginLeft: "auto",
+                          fontSize: "1rem",
+                          fontFamily: "Poppins, sans-serif",
+                          fontWeight: "bold",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEditModal(event);
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#BD4F00";
+                          e.currentTarget.style.color = "#FFFFFF"; // kembali ke putih
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#FFC800";
+                          e.currentTarget.style.color = "#000000"; // misalnya jadi kuning saat hover
+                        }}
+                      >
+                        Edit
+                      </button>
+                    </>
+                  )}
+                </div>
+
+                {/* Modal View */}
                 {showModal && modalEvent && (
                   <div className="modal is-active">
                     <div
@@ -676,7 +802,6 @@ const CreatePage = () => {
                             <strong>Description:</strong>{" "}
                             {modalEvent.description}
                           </p>
-
                           <p>
                             <strong>Invited Members:</strong>
                           </p>
@@ -699,145 +824,119 @@ const CreatePage = () => {
                   </div>
                 )}
 
-                {userEmail === event.creator_email && (
-                  <>
-                    <div className="card-footer mt-2">
-                      <button
-                        className="button is-danger"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(event.id);
-                        }}
-                      >
-                        <FaTrash style={{ marginRight: "0.5rem" }} />
-                        Delete
-                      </button>
-                    </div>
-                    <div className="card-footer mt-2">
-                      <button
-                        className="button is-warning"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openEditModal(event);
-                        }}
-                      >
-                        ✏️ Edit
-                      </button>
-                    </div>
-                    {isEditModalOpen && (
-                      <div className="modal is-active">
-                        <div
-                          className="modal-background"
+                {/* Modal Edit */}
+                {isEditModalOpen && (
+                  <div className="modal is-active">
+                    <div
+                      className="modal-background"
+                      onClick={() => setIsEditModalOpen(false)}
+                    ></div>
+                    <div className="modal-card">
+                      <header className="modal-card-head">
+                        <p className="modal-card-title">Edit Event</p>
+                        <button
+                          className="delete"
+                          aria-label="close"
                           onClick={() => setIsEditModalOpen(false)}
-                        ></div>
-                        <div className="modal-card">
-                          <header className="modal-card-head">
-                            <p className="modal-card-title">Edit Event</p>
-                            <button
-                              className="delete"
-                              aria-label="close"
-                              onClick={() => setIsEditModalOpen(false)}
-                            ></button>
-                          </header>
-                          <section className="modal-card-body">
-                            <div className="field">
-                              <label className="label">Title</label>
-                              <input
-                                className="input"
-                                type="text"
-                                value={selectedEvent.title}
-                                onChange={(e) =>
-                                  setSelectedEvent({
-                                    ...selectedEvent,
-                                    title: e.target.value,
-                                  })
-                                }
-                              />
-                            </div>
-
-                            <div className="field">
-                              <label className="label">Organizer</label>
-                              <input
-                                className="input"
-                                type="text"
-                                value={selectedEvent.organizer}
-                                onChange={(e) =>
-                                  setSelectedEvent({
-                                    ...selectedEvent,
-                                    organizer: e.target.value,
-                                  })
-                                }
-                              />
-                            </div>
-
-                            <div className="field">
-                              <label className="label">Description</label>
-                              <textarea
-                                className="textarea"
-                                value={selectedEvent.description}
-                                onChange={(e) =>
-                                  setSelectedEvent({
-                                    ...selectedEvent,
-                                    description: e.target.value,
-                                  })
-                                }
-                              ></textarea>
-                            </div>
-
-                            <div className="field">
-                              <label className="label">Invited Members</label>
-                              <div className="tags">
-                                {selectedEvent.invited_members.map(
-                                  (email, index) => (
-                                    <span key={index} className="tag is-info">
-                                      {email}
-                                      <button
-                                        className="delete is-small"
-                                        onClick={() => handleRemoveEmail(email)}
-                                      ></button>
-                                    </span>
-                                  )
-                                )}
-                              </div>
-                              <div className="field has-addons mt-2">
-                                <div className="control is-expanded">
-                                  <input
-                                    className="input"
-                                    type="email"
-                                    placeholder="Add member email"
-                                    value={emailInput}
-                                    onChange={handleEmailChange}
-                                  />
-                                </div>
-                                <div className="control">
-                                  <button
-                                    className="button is-link"
-                                    onClick={handleAddEmail}
-                                  >
-                                    Add
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </section>
-                          <footer className="modal-card-foot">
-                            <button
-                              className="button is-success"
-                              onClick={handleEditSave}
-                            >
-                              Save Changes
-                            </button>
-                            <button
-                              className="button"
-                              onClick={() => setIsEditModalOpen(false)}
-                            >
-                              Cancel
-                            </button>
-                          </footer>
+                        ></button>
+                      </header>
+                      <section className="modal-card-body">
+                        <div className="field">
+                          <label className="label">Title</label>
+                          <input
+                            className="input"
+                            type="text"
+                            value={selectedEvent.title}
+                            onChange={(e) =>
+                              setSelectedEvent({
+                                ...selectedEvent,
+                                title: e.target.value,
+                              })
+                            }
+                          />
                         </div>
-                      </div>
-                    )}
-                  </>
+
+                        <div className="field">
+                          <label className="label">Organizer</label>
+                          <input
+                            className="input"
+                            type="text"
+                            value={selectedEvent.organizer}
+                            onChange={(e) =>
+                              setSelectedEvent({
+                                ...selectedEvent,
+                                organizer: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="field">
+                          <label className="label">Description</label>
+                          <textarea
+                            className="textarea"
+                            value={selectedEvent.description}
+                            onChange={(e) =>
+                              setSelectedEvent({
+                                ...selectedEvent,
+                                description: e.target.value,
+                              })
+                            }
+                          ></textarea>
+                        </div>
+
+                        <div className="field">
+                          <label className="label">Invited Members</label>
+                          <div className="tags">
+                            {selectedEvent.invited_members.map(
+                              (email, index) => (
+                                <span key={index} className="tag is-info">
+                                  {email}
+                                  <button
+                                    className="delete is-small"
+                                    onClick={() => handleRemoveEmail(email)}
+                                  ></button>
+                                </span>
+                              )
+                            )}
+                          </div>
+                          <div className="field has-addons mt-2">
+                            <div className="control is-expanded">
+                              <input
+                                className="input"
+                                type="email"
+                                placeholder="Add member email"
+                                value={emailInput}
+                                onChange={handleEmailChange}
+                              />
+                            </div>
+                            <div className="control">
+                              <button
+                                className="button is-link"
+                                onClick={handleAddEmail}
+                              >
+                                Add
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                      <footer className="modal-card-foot">
+                        <button
+                          className="button is-success"
+                          onClick={handleEditSave}
+                        >
+                          Save Changes
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => setIsEditModalOpen(false)}
+                        >
+                          Cancel
+                        </button>
+                      </footer>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
