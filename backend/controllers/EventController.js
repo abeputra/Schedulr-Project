@@ -1,4 +1,5 @@
 import Event from "../models/EventModel.js";
+import SubEvent from "../models/SubEventModel.js"; //
 import User from "../models/UserModel.js";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
@@ -155,7 +156,6 @@ export const deleteEvent = async (req, res) => {
     const userId = req.user.id;
     const eventId = req.params.id;
 
-    // Find the event to delete
     const event = await Event.findOne({ where: { id: eventId, userId } });
 
     if (!event) {
@@ -164,13 +164,14 @@ export const deleteEvent = async (req, res) => {
         .json({ message: "Event not found or access denied" });
     }
 
-    // Get the list of invited members before deletion
     const { title, organizer, description, invited_members } = event;
 
-    // Delete the event
+    // Delete all sub-events linked to this event
+    await SubEvent.destroy({ where: { eventId } });
+
+    // Delete the main event
     await event.destroy();
 
-    // Send email notification to all invited members
     for (let email of invited_members) {
       try {
         await transporter.sendMail({
@@ -193,7 +194,9 @@ export const deleteEvent = async (req, res) => {
       }
     }
 
-    res.status(200).json({ message: "Event deleted successfully" });
+    res
+      .status(200)
+      .json({ message: "Event and its sub-events deleted successfully" });
   } catch (error) {
     console.error("\u274C Error deleting event:", error.message);
     res.status(500).json({ message: "Failed to delete event" });

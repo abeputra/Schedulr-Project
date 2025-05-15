@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa"; // Importing relevant icons
 import defaultProfileImage from "../assets/profile-photo-default.png";
 import { useNavigate, Link } from "react-router-dom";
+import backgroundMotif from "../assets/background-motif.png";
 
 interface Event {
   id: number;
@@ -22,6 +23,8 @@ interface Event {
 }
 
 const CreatePage = () => {
+  const [showModal, setShowModal] = useState(false);
+
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [timezone, setTimezone] = useState("");
@@ -31,6 +34,7 @@ const CreatePage = () => {
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [modalEvent, setModalEvent] = useState(null);
 
   const [selectedEvent, setSelectedEvent] = useState({
     title: "",
@@ -259,7 +263,15 @@ const CreatePage = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "white", minHeight: "100vh" }}>
+    <div
+      style={{
+        backgroundImage: `url(${backgroundMotif})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+      }}
+    >
       {" "}
       {/* Apply white background here */}
       {/* Overlay (Dim effect) */}
@@ -611,13 +623,81 @@ const CreatePage = () => {
                   <p>
                     <strong>Description:</strong> {event.description}
                   </p>
-                  <p>
-                    <strong>Invited Members:</strong>{" "}
-                    {Array.isArray(event.invited_members)
-                      ? event.invited_members.join(", ")
-                      : "-"}
-                  </p>
                 </Link>
+
+                <p>
+                  <strong>Invited Members:</strong>{" "}
+                  {Array.isArray(event.invited_members)
+                    ? event.invited_members.length
+                    : 0}
+                </p>
+
+                {Array.isArray(event.invited_members) &&
+                  event.invited_members.length > 0 && (
+                    <div className="card-footer mt-2">
+                      <button
+                        className="button is-info"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setModalEvent(event);
+                          setShowModal(true);
+                        }}
+                      >
+                        👁️ View
+                      </button>
+                    </div>
+                  )}
+
+                {showModal && modalEvent && (
+                  <div className="modal is-active">
+                    <div
+                      className="modal-background"
+                      onClick={() => setShowModal(false)}
+                    ></div>
+                    <div className="modal-card">
+                      <header className="modal-card-head">
+                        <p className="modal-card-title">Event Details</p>
+                        <button
+                          className="delete"
+                          aria-label="close"
+                          onClick={() => setShowModal(false)}
+                        ></button>
+                      </header>
+                      <section className="modal-card-body">
+                        <div className="content">
+                          <p>
+                            <strong>Title:</strong> {modalEvent.title}
+                          </p>
+                          <p>
+                            <strong>Organizer:</strong> {modalEvent.organizer}
+                          </p>
+                          <p>
+                            <strong>Description:</strong>{" "}
+                            {modalEvent.description}
+                          </p>
+
+                          <p>
+                            <strong>Invited Members:</strong>
+                          </p>
+                          <ul>
+                            {modalEvent.invited_members.map((email, index) => (
+                              <li key={index}>📧 {email}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </section>
+                      <footer className="modal-card-foot">
+                        <button
+                          className="button"
+                          onClick={() => setShowModal(false)}
+                        >
+                          Close
+                        </button>
+                      </footer>
+                    </div>
+                  </div>
+                )}
 
                 {userEmail === event.creator_email && (
                   <>
@@ -644,6 +724,119 @@ const CreatePage = () => {
                         ✏️ Edit
                       </button>
                     </div>
+                    {isEditModalOpen && (
+                      <div className="modal is-active">
+                        <div
+                          className="modal-background"
+                          onClick={() => setIsEditModalOpen(false)}
+                        ></div>
+                        <div className="modal-card">
+                          <header className="modal-card-head">
+                            <p className="modal-card-title">Edit Event</p>
+                            <button
+                              className="delete"
+                              aria-label="close"
+                              onClick={() => setIsEditModalOpen(false)}
+                            ></button>
+                          </header>
+                          <section className="modal-card-body">
+                            <div className="field">
+                              <label className="label">Title</label>
+                              <input
+                                className="input"
+                                type="text"
+                                value={selectedEvent.title}
+                                onChange={(e) =>
+                                  setSelectedEvent({
+                                    ...selectedEvent,
+                                    title: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+
+                            <div className="field">
+                              <label className="label">Organizer</label>
+                              <input
+                                className="input"
+                                type="text"
+                                value={selectedEvent.organizer}
+                                onChange={(e) =>
+                                  setSelectedEvent({
+                                    ...selectedEvent,
+                                    organizer: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+
+                            <div className="field">
+                              <label className="label">Description</label>
+                              <textarea
+                                className="textarea"
+                                value={selectedEvent.description}
+                                onChange={(e) =>
+                                  setSelectedEvent({
+                                    ...selectedEvent,
+                                    description: e.target.value,
+                                  })
+                                }
+                              ></textarea>
+                            </div>
+
+                            <div className="field">
+                              <label className="label">Invited Members</label>
+                              <div className="tags">
+                                {selectedEvent.invited_members.map(
+                                  (email, index) => (
+                                    <span key={index} className="tag is-info">
+                                      {email}
+                                      <button
+                                        className="delete is-small"
+                                        onClick={() => handleRemoveEmail(email)}
+                                      ></button>
+                                    </span>
+                                  )
+                                )}
+                              </div>
+                              <div className="field has-addons mt-2">
+                                <div className="control is-expanded">
+                                  <input
+                                    className="input"
+                                    type="email"
+                                    placeholder="Add member email"
+                                    value={emailInput}
+                                    onChange={handleEmailChange}
+                                  />
+                                </div>
+                                <div className="control">
+                                  <button
+                                    className="button is-link"
+                                    onClick={handleAddEmail}
+                                  >
+                                    Add
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                          <footer className="modal-card-foot">
+                            <button
+                              className="button is-success"
+                              onClick={handleEditSave}
+                            >
+                              Save Changes
+                            </button>
+                            <button
+                              className="button"
+                              onClick={() => setIsEditModalOpen(false)}
+                            >
+                              Cancel
+                            </button>
+                          </footer>
+                        </div>
+                      </div>
+                    )}
                   </>
                 )}
               </div>
