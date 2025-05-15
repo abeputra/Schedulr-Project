@@ -520,48 +520,91 @@ const CreatePage = () => {
           </div>
         </div>
       </nav>
-      {/* Add Button */}
+      {/* Event List Column */}
       <div
-        className="is-flex is-justify-content-center is-align-items-center"
-        style={{ marginTop: "4rem" }}
+        style={{
+          marginTop: "2rem",
+          marginLeft: "16rem",
+          marginRight: "16rem",
+        }}
       >
-        <Link
-          to="/details"
+        <h2
+          className="title is-4"
           style={{
-            backgroundColor: "#007BFF",
-            color: "white",
-            padding: "2rem 3rem",
-            borderRadius: "1rem",
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
-            textDecoration: "none",
+            color: "#0D1A2A",
+            marginTop: "5rem",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 700,
+            fontSize: "2rem", // misalnya 2rem = 32px
           }}
         >
-          <FaPlus size={24} />
-          Add New
-        </Link>
-      </div>
-      {/* Invited Events */}
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-2">Invited Events</h2>
-        {events.length === 0 ? (
-          <p className="text-gray-500">You have no invited events.</p>
-        ) : (
-          <ul className="space-y-4">
-            {events.map((event) => (
-              <li
-                key={event.id}
-                className="p-4 border rounded shadow hover:bg-gray-100 transition"
+          Your Events
+        </h2>
+
+        <div className="columns is-multiline">
+          {/* Kotak "Add New Event" */}
+          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
+            <Link
+              to="/details"
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <div
+                className="box is-flex is-justify-content-center is-align-items-center"
+                style={{
+                  backgroundColor: "#F38B40",
+                  color: "white",
+                  padding: "4rem 3rem",
+                  borderRadius: "1.2rem",
+                  fontWeight: "700",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "1.5rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "1rem",
+                  height: "100%",
+                  cursor: "pointer",
+                  boxShadow: "0 8px 10px rgba(0, 0, 0, 0.2)",
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#0E3360";
+                  e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#F38B40"; // kembali ke warna asal
+                  e.currentTarget.style.color = "#0D1A2A"; // font kembali ke asal
+                }}
+              >
+                <FaPlus size={32} />
+                Add New Event
+              </div>
+            </Link>
+          </div>
+
+          {/* Kotak-kotak event */}
+          {events.map((event) => (
+            <div
+              key={event.id}
+              className="column is-full-mobile is-half-tablet is-one-third-desktop"
+            >
+              <div
+                className="box"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#0E3360";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#0D1A2A";
+                }}
               >
                 <Link
                   to={`/subevent/${event.id}`}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
-                  <h3 className="text-lg font-semibold">{event.title}</h3>
+                  <h3 className="title is-5">{event.title}</h3>
                   <p>
                     <strong>Organizer:</strong> {event.organizer}
                   </p>
@@ -575,27 +618,22 @@ const CreatePage = () => {
                       : "-"}
                   </p>
                 </Link>
-                {/* Tombol Delete di luar Link */}
-                {userEmail === event.creator_email && (
-                  <div className="card-footer">
-                    <button
-                      className="button is-danger"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Mencegah klik pada tombol delete memicu navigasi
-                        handleDelete(event.id);
-                      }}
-                    >
-                      <FaTrash style={{ marginRight: "0.5rem" }} />
-                      Delete
-                    </button>
-                  </div>
-                )}
+
                 {userEmail === event.creator_email && (
                   <>
-                    <div
-                      className="card-footer"
-                      style={{ marginTop: "0.5rem" }}
-                    >
+                    <div className="card-footer mt-2">
+                      <button
+                        className="button is-danger"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(event.id);
+                        }}
+                      >
+                        <FaTrash style={{ marginRight: "0.5rem" }} />
+                        Delete
+                      </button>
+                    </div>
+                    <div className="card-footer mt-2">
                       <button
                         className="button is-warning"
                         onClick={(e) => {
@@ -608,126 +646,10 @@ const CreatePage = () => {
                     </div>
                   </>
                 )}
-              </li>
-            ))}
-          </ul>
-        )}
-        // Edit Modal JSX
-        {isEditModalOpen && selectedEvent && (
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              zIndex: 2000,
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "white",
-                padding: "2rem",
-                borderRadius: "1rem",
-                width: "90%",
-                maxWidth: "500px",
-                boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
-              }}
-            >
-              <h2 style={{ marginBottom: "1rem", fontSize: "1.25rem" }}>
-                Edit Event
-              </h2>
-              <div className="field">
-                <label className="label">Title</label>
-                <input
-                  className="input"
-                  type="text"
-                  value={selectedEvent.title}
-                  onChange={(e) =>
-                    setSelectedEvent({
-                      ...selectedEvent,
-                      title: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="field">
-                <label className="label">Organizer</label>
-                <textarea
-                  className="textarea"
-                  value={selectedEvent.organizer}
-                  onChange={(e) =>
-                    setSelectedEvent({
-                      ...selectedEvent,
-                      organizer: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="field">
-                <label className="label">Description</label>
-                <textarea
-                  className="textarea"
-                  value={selectedEvent.description}
-                  onChange={(e) =>
-                    setSelectedEvent({
-                      ...selectedEvent,
-                      description: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="field">
-                <label className="label">Invited Members (Email)</label>
-                <div className="input-group">
-                  <input
-                    className="input"
-                    type="email"
-                    value={emailInput}
-                    onChange={handleEmailChange}
-                    placeholder="Enter email"
-                  />
-                  <button
-                    className="button is-primary"
-                    onClick={handleAddEmail}
-                    disabled={!emailInput}
-                  >
-                    Add
-                  </button>
-                </div>
-                <small>Enter email address and click "Add".</small>
-              </div>
-              <ul>
-                {selectedEvent.invited_members.map((email, idx) => (
-                  <li key={idx}>
-                    {email}
-                    <button
-                      onClick={() => handleRemoveEmail(email)}
-                      style={{ marginLeft: "8px" }}
-                    >
-                      Remove
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <div className="field is-grouped" style={{ marginTop: "1rem" }}>
-                <button className="button is-success" onClick={handleEditSave}>
-                  Save
-                </button>
-                <button
-                  className="button is-light"
-                  onClick={() => setIsEditModalOpen(false)}
-                >
-                  Cancel
-                </button>
               </div>
             </div>
-          </div>
-        )}
+          ))}
+        </div>
       </div>
     </div>
   );

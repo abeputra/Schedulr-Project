@@ -452,7 +452,7 @@ const DashboardPage = () => {
           }
         >
           <FaPlus size={24} />
-          Schedule New Event
+          Schedule Your Event
         </Link>
       </div>
       {/* === Upcoming Tasks === */}
