@@ -12,6 +12,8 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import defaultProfileImage from "../assets/profile-photo-default.png";
+import backgroundMotif from "../assets/background-motif.png";
+import "../index.css";
 
 const EventDetails = () => {
   const [eventName, setEventName] = useState("");
@@ -174,8 +176,34 @@ const EventDetails = () => {
     fetchEvents();
   }, []);
 
+  const handleRemoveMember = (index) => {
+    const newMembers = members.filter((_, i) => i !== index);
+    if (newMembers.length === 0) {
+      setMembers([""]); // selalu set minimal 1 input kosong
+    } else {
+      setMembers(newMembers);
+    }
+  };
+
+  const isValidEmail = (email) => {
+    // Regex email sederhana
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const canAddMember = members.every(
+    (email) => email.trim() !== "" && isValidEmail(email)
+  );
+
   return (
-    <div style={{ backgroundColor: "white", minHeight: "100vh" }}>
+    <div
+      style={{
+        backgroundImage: `url(${backgroundMotif})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+      }}
+    >
       {" "}
       {/* Apply white background here */}
       {/* Overlay (Dim effect) */}
@@ -437,12 +465,29 @@ const EventDetails = () => {
         </div>
       </nav>
       <div className="container mt-5">
-        <h2 className="title is-3" style={{ color: "#0D1A2A" }}>
+        <h2
+          className="title is-4"
+          style={{
+            color: "#0D1A2A",
+            marginTop: "5rem",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 700,
+            fontSize: "2rem", // misalnya 2rem = 32px
+          }}
+        >
           Create New Event
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="field">
-            <label className="label" style={{ color: "#0D1A2A" }}>
+            <label
+              className="label"
+              style={{
+                color: "#0D1A2A",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 500,
+                fontSize: "1.2rem",
+              }}
+            >
               Event Name
             </label>
             <div className="control">
@@ -452,12 +497,29 @@ const EventDetails = () => {
                 value={eventName}
                 onChange={(e) => setEventName(e.target.value)}
                 required
+                placeholder="Enter your event name"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginBottom: "1rem",
+                }}
               />
             </div>
           </div>
 
           <div className="field">
-            <label className="label" style={{ color: "#0D1A2A" }}>
+            <label
+              className="label"
+              style={{
+                color: "#0D1A2A",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 500,
+                fontSize: "1.2rem",
+              }}
+            >
               Organizer
             </label>
             <div className="control">
@@ -467,13 +529,30 @@ const EventDetails = () => {
                 value={organizer}
                 onChange={(e) => setOrganizer(e.target.value)} // Organizer bisa diubah
                 required
+                placeholder="Enter the organizer name"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginBottom: "1rem",
+                }}
               />
             </div>
           </div>
 
           <div className="field">
-            <label className="label" style={{ color: "#0D1A2A" }}>
-              Event Creator (Email)
+            <label
+              className="label"
+              style={{
+                color: "#0D1A2A",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 500,
+                fontSize: "1.2rem",
+              }}
+            >
+              Event Creator
             </label>
             <div className="control">
               <input
@@ -481,58 +560,215 @@ const EventDetails = () => {
                 type="email"
                 value={eventCreatorEmail} // Email creator diisi otomatis
                 readOnly
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginBottom: "1rem",
+                }}
               />
             </div>
           </div>
 
           <div className="field">
-            <label className="label" style={{ color: "#0D1A2A" }}>
+            <label
+              className="label"
+              style={{
+                color: "#0D1A2A",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 500,
+                fontSize: "1.2rem",
+              }}
+            >
               Description
             </label>
             <div className="control">
               <textarea
-                className="textarea"
+                className="textarea custom-textarea"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
+                placeholder="Enter the description"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginBottom: "1.5rem",
+                }}
               ></textarea>
             </div>
           </div>
 
           <div className="field">
-            <label className="label" style={{ color: "#0D1A2A" }}>
+            <label
+              className="label"
+              style={{
+                color: "#0D1A2A",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 500,
+                fontSize: "1.2rem",
+              }}
+            >
               Invite Members
             </label>
-            {members.map((member, index) => (
-              <div className="control mb-2" key={index}>
-                <input
-                  className="input"
-                  type="email"
-                  placeholder="Member email"
-                  value={member}
-                  onChange={(e) => handleMemberChange(index, e.target.value)}
-                  required
-                />
-              </div>
-            ))}
-            <button
-              type="button"
-              className="button is-link is-light"
-              onClick={handleAddMember}
-            >
-              Add Member
-            </button>
+            {members.map((member, index) => {
+              const invalid = member && !isValidEmail(member); // <-- ini harus ada
+
+              return (
+                <div
+                  className="control"
+                  key={index}
+                  style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                  }}
+                >
+                  <input
+                    className="input"
+                    type="email"
+                    placeholder="Enter the member's Email"
+                    value={member}
+                    onChange={(e) => handleMemberChange(index, e.target.value)}
+                    required
+                    style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontStyle: "italic",
+                      fontSize: "1.2rem",
+                      height: "3.5rem",
+                      borderRadius: "0.8rem",
+                      marginBottom: "0",
+                      flex: 1,
+                      borderColor: invalid ? "red" : "",
+                      boxShadow: invalid ? "0 0 5px red" : "",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={handleAddMember}
+                    disabled={!canAddMember}
+                    style={{
+                      height: "3.5rem",
+                      borderRadius: "0.8rem",
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: "1.2rem",
+                      whiteSpace: "nowrap",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#FF6A00";
+                      e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#F38B40"; // kembali ke warna asal
+                      e.currentTarget.style.color = "#0D1A2A"; // font kembali ke asal
+                    }}
+                  >
+                    Add Member
+                  </button>
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={() => handleRemoveMember(index)}
+                    disabled={!member.trim()}
+                    style={{
+                      height: "3.5rem",
+                      borderRadius: "0.8rem",
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: "1.2rem",
+                      whiteSpace: "nowrap",
+                      cursor: !member.trim() ? "not-allowed" : "pointer",
+                      opacity: !member.trim() ? 0.5 : 1,
+                      color: "#DA0000",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#FF0000";
+                      e.currentTarget.style.color = "#0D1A2A"; // ubah font jadi putih saat hover
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#DA0000"; // kembali ke warna asal
+                      e.currentTarget.style.color = "#FFFFFF"; // font kembali ke asal
+                    }}
+                  >
+                    Remove
+                  </button>
+                  {invalid && (
+                    <p
+                      style={{
+                        position: "absolute",
+                        backgroundColor: "#f8d7da", // merah muda transparan
+                        color: "#721c24", // merah gelap
+                        border: "1px solid #f5c6cb",
+                        borderRadius: "4px",
+                        padding: "6px 10px",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "0.9rem",
+                        top: "100%", // tepat di bawah input
+                        left: 0,
+                        marginTop: "4px",
+                        whiteSpace: "nowrap",
+                        zIndex: 10,
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                        pointerEvents: "none",
+                        userSelect: "none",
+                      }}
+                    >
+                      Invalid email address!
+                    </p>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <div className="field mt-4">
             <div className="control">
-              <button type="submit" className="button is-primary">
+              <button
+                type="submit"
+                className="button is-primary"
+                style={{
+                  backgroundColor: "#F38B40",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "1.2rem",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#FF6A00";
+                  e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#F38B40"; // kembali ke warna asal
+                  e.currentTarget.style.color = "#0D1A2A"; // font kembali ke asal
+                }}
+              >
                 Create Event
               </button>
               <button
                 type="button"
                 className="button is-light ml-2"
                 onClick={() => navigate("/dashboard")}
+                style={{
+                  backgroundColor: "#BEBEBE",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: "1.2rem",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#BEBEBE";
+                  e.currentTarget.style.color = "#FFFFFF"; // ubah font jadi putih saat hover
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#BEBEBE"; // kembali ke warna asal
+                  e.currentTarget.style.color = "#0D1A2A"; // font kembali ke asal
+                }}
               >
                 Back to Dashboard
               </button>
@@ -553,20 +789,58 @@ const EventDetails = () => {
               <div className="column is-4" key={event.id}>
                 <div className="card">
                   <div className="card-content">
-                    <p className="title is-5">{event.title}</p>
-                    <p className="subtitle is-6">
-                      <strong>Organizer:</strong> {event.organizer || "Unknown"}
+                    <h3
+                      style={{
+                        fontSize: "1.5rem",
+                        fontFamily: "Poppins, sans-serif",
+                        fontWeight: "bold",
+                        marginBottom: "1rem",
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      {event.title}
+                    </h3>
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        fontFamily: "Poppins, sans-serif",
+                        fontWeight: "normal",
+                        marginBottom: "0.3rem",
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      Organized by {event.organizer}
                     </p>
-                    <p>
-                      <strong>Description:</strong> {event.description}
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        fontFamily: "Poppins, sans-serif",
+                        fontWeight: "normal",
+                        marginBottom: "0.3rem",
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      Description
+                      <span style={{ marginLeft: "3.7rem" }}>
+                        : {event.description}
+                      </span>
                     </p>
-                    <p>
-                      <strong>Members Invited:</strong>{" "}
-                      {event.invited_members?.length || 0}
-                    </p>
-                    <p>
-                      <strong>Creator:</strong>{" "}
-                      {event.creator_email || "Unknown"}
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        fontFamily: "Poppins, sans-serif",
+                        fontWeight: "normal",
+
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      Invited Members
+                      <span style={{ marginLeft: "1rem" }}>
+                        :{" "}
+                        {Array.isArray(event.invited_members)
+                          ? event.invited_members.length
+                          : 0}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -575,6 +849,9 @@ const EventDetails = () => {
           </div>
         )}
       </div>
+      <div className="columns is-multiline">{/* ...event boxes here... */}</div>
+      {/* Spacer di bawah semua konten */}
+      <div style={{ height: "5rem" }}></div>
     </div>
   );
 };

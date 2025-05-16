@@ -538,6 +538,7 @@ const CreatePage = () => {
           marginTop: "2rem",
           marginLeft: "16rem",
           marginRight: "16rem",
+          paddingBottom: "6rem",
         }}
       >
         <h2
