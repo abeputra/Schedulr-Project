@@ -555,13 +555,165 @@ const PerSubEvent = () => {
             fontFamily: "'Poppins', sans-serif",
             fontWeight: "bold",
             fontSize: "2rem",
-            marginTop: "0.7rem",
+            marginTop: "2rem",
             letterSpacing: "0.05em",
             marginBottom: "1rem",
+            textAlign: "center",
           }}
         >
           Sub-Event Detail
         </h1>
+
+        <div
+          style={{
+            backgroundColor: "#0D1A2A",
+            padding: "2rem",
+            borderRadius: "12px",
+            marginTop: "2rem",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <ul style={{ listStyleType: "none", padding: 0 }}>
+            <li
+              style={{
+                color: "#FFFFFF",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                marginTop: "0.7rem",
+                letterSpacing: "0.05em",
+                marginBottom: "1rem",
+              }}
+            >
+              {subEvent.title}
+            </li>
+            <li
+              style={{
+                color: "#FFFFFF",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: "normal",
+                fontSize: "1.5rem",
+                marginTop: "0.7rem",
+                letterSpacing: "0.05em",
+                marginBottom: "1rem",
+              }}
+            >
+              Description:
+              <span style={{ marginLeft: "3.7rem" }}>
+                : {subEvent.description}
+              </span>
+            </li>
+            <li
+              style={{
+                color: "#FFFFFF",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: "normal",
+                fontSize: "1.5rem",
+                marginTop: "0.7rem",
+                letterSpacing: "0.05em",
+                marginBottom: "1rem",
+              }}
+            >
+              Date:
+              <span style={{ marginLeft: "9rem" }}>: {subEvent.date}</span>
+            </li>
+            <li
+              style={{
+                color: "#FFFFFF",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: "normal",
+                fontSize: "1.5rem",
+                marginTop: "0.7rem",
+                letterSpacing: "0.05em",
+                marginBottom: "1rem",
+              }}
+            >
+              Time:
+              <span style={{ marginLeft: "9rem" }}>: {subEvent.time}</span>
+            </li>
+            <li
+              style={{
+                color: "#FFFFFF",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: "normal",
+                fontSize: "1.5rem",
+                marginTop: "0.7rem",
+                letterSpacing: "0.05em",
+                marginBottom: "1rem",
+              }}
+            >
+              Location:
+              <span style={{ marginLeft: "6rem" }}>: {subEvent.location}</span>
+            </li>
+            <li
+              style={{
+                color: "#FFFFFF",
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: "normal",
+                fontSize: "1.5rem",
+                marginTop: "0.7rem",
+                letterSpacing: "0.05em",
+                marginBottom: "1rem",
+              }}
+            >
+              Type:
+              <span style={{ marginLeft: "9rem" }}>
+                : {subEvent.task_or_agenda}
+              </span>
+            </li>
+
+            {/* Assigned Section */}
+            {Array.isArray(subEvent.assignedtasks) &&
+            subEvent.assignedtasks.length > 0 ? (
+              <div
+                style={{
+                  color: "#FFFFFF",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: "normal",
+                  fontSize: "1.5rem",
+                  marginTop: "3rem",
+                  letterSpacing: "0.05em",
+                  marginBottom: "1rem",
+                }}
+              >
+                <b>Assigned Tasks:</b>
+                <ul>
+                  {subEvent.assignedtasks.map((task, i) => (
+                    <li key={i}>
+                      {i + 1}. {task.email} as {task.taskType}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : subEvent.assignedmembers ? (
+              <div
+                style={{
+                  color: "#FFFFFF",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: "normal",
+                  fontSize: "1.5rem",
+                  marginTop: "0.7rem",
+                  letterSpacing: "0.05em",
+                  marginBottom: "1rem",
+                }}
+              >
+                <h3>Assigned Members:</h3>
+                <ul>
+                  {(Array.isArray(subEvent.assignedmembers)
+                    ? subEvent.assignedmembers
+                    : typeof subEvent.assignedmembers === "string"
+                    ? subEvent.assignedmembers.split(",")
+                    : []
+                  ).map((member, i) => (
+                    <li key={i}>
+                      {i + 1}. {member.trim()}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </ul>
+        </div>
         <button
           onClick={() => {
             setEditData({
@@ -588,6 +740,7 @@ const PerSubEvent = () => {
             borderRadius: "8px",
             cursor: "pointer",
             transition: "background-color 0.3s ease, transform 0.2s ease",
+            marginTop: "2rem",
           }}
           onMouseOver={(e) => {
             e.target.style.backgroundColor = "#e0e7ef";
@@ -600,136 +753,6 @@ const PerSubEvent = () => {
         >
           Edit
         </button>
-
-        <ul style={{ listStyleType: "none", padding: 0 }}>
-          <li
-            style={{
-              color: "#0D1A2A",
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-              marginTop: "0.7rem",
-              letterSpacing: "0.05em",
-              marginBottom: "1rem",
-            }}
-          >
-            {subEvent.title}
-          </li>
-          <li
-            style={{
-              color: "#0D1A2A",
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: "normal",
-              fontSize: "1.5rem",
-              marginTop: "0.7rem",
-              letterSpacing: "0.05em",
-              marginBottom: "1rem",
-            }}
-          >
-            <b>Description:</b> {subEvent.description}
-          </li>
-          <li
-            style={{
-              color: "#0D1A2A",
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: "normal",
-              fontSize: "1.5rem",
-              marginTop: "0.7rem",
-              letterSpacing: "0.05em",
-              marginBottom: "1rem",
-            }}
-          >
-            <b>Date:</b> {subEvent.date}
-          </li>
-          <li
-            style={{
-              color: "#0D1A2A",
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: "normal",
-              fontSize: "1.5rem",
-              marginTop: "0.7rem",
-              letterSpacing: "0.05em",
-              marginBottom: "1rem",
-            }}
-          >
-            <b>Time:</b> {subEvent.time}
-          </li>
-          <li
-            style={{
-              color: "#0D1A2A",
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: "normal",
-              fontSize: "1.5rem",
-              marginTop: "0.7rem",
-              letterSpacing: "0.05em",
-              marginBottom: "1rem",
-            }}
-          >
-            <b>Location:</b> {subEvent.location}
-          </li>
-          <li
-            style={{
-              color: "#0D1A2A",
-              fontFamily: "'Poppins', sans-serif",
-              fontWeight: "normal",
-              fontSize: "1.5rem",
-              marginTop: "0.7rem",
-              letterSpacing: "0.05em",
-              marginBottom: "1rem",
-            }}
-          >
-            <b>Type:</b> {subEvent.task_or_agenda}
-          </li>
-
-          {/* Assigned Section */}
-          {Array.isArray(subEvent.assignedtasks) &&
-          subEvent.assignedtasks.length > 0 ? (
-            <div
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: "normal",
-                fontSize: "1.5rem",
-                marginTop: "0.7rem",
-                letterSpacing: "0.05em",
-                marginBottom: "1rem",
-              }}
-            >
-              <b>Assigned Tasks:</b>
-              <ul>
-                {subEvent.assignedtasks.map((task, i) => (
-                  <li key={i}>
-                    {task.email}: {task.taskType}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : subEvent.assignedmembers ? (
-            <div
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: "normal",
-                fontSize: "1.5rem",
-                marginTop: "0.7rem",
-                letterSpacing: "0.05em",
-                marginBottom: "1rem",
-              }}
-            >
-              <h3>Assigned Members:</h3>
-              <ul>
-                {(Array.isArray(subEvent.assignedmembers)
-                  ? subEvent.assignedmembers
-                  : typeof subEvent.assignedmembers === "string"
-                  ? subEvent.assignedmembers.split(",")
-                  : []
-                ).map((member, i) => (
-                  <li key={i}>{member.trim()}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-        </ul>
 
         {isEditing && (
           <EditModal
