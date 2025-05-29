@@ -436,7 +436,11 @@ const Details = () => {
               </Link>
             </li>
             <li>
-              <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+              <Link
+                to="/"
+                onClick={() => localStorage.removeItem("token")}
+                style={{ color: "white", textDecoration: "none" }}
+              >
                 <FaSignOutAlt style={{ marginRight: "1rem" }} />
                 Logout
               </Link>
