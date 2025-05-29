@@ -144,6 +144,9 @@ const DashboardPage = () => {
     e.preventDefault();
     if (!chatInput.trim()) return;
 
+    // Contoh: mode bisa dipilih user, atau hardcode dulu untuk testing
+    const mode = "analisis"; // atau "input_event", "input_subevent"
+
     const newMessage = { role: "user", content: chatInput };
     setChatHistory((prev) => [...prev, newMessage]);
 
@@ -162,13 +165,13 @@ const DashboardPage = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ message: chatInput }),
+        body: JSON.stringify({ message: chatInput, mode }), // <-- kirim mode
       });
 
       const data = await response.json();
       setChatHistory((prev) => [
         ...prev,
-        { role: "assistant", content: data.response },
+        { role: "assistant", content: data.response || JSON.stringify(data.model, null, 2) },
       ]);
       setChatInput("");
     } catch (error) {
