@@ -5,7 +5,7 @@ import session from "express-session";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import cookieParser from "cookie-parser";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import EventRoute from "./routes/EventRoute.js";
 import SubEventRoute from "./routes/SubEventRoute.js";
 
@@ -14,10 +14,10 @@ import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import "./passport.js"; // Jika file ini tidak ada, boleh dihapus
 
-import './models/UserModel.js';
-import './models/EventModel.js';
-import './models/SubEventModel.js';
-import './models/associations.js'; // <== WAJIB: pasang asosiasi setelah semua model dimuat
+import "./models/UserModel.js";
+import "./models/EventModel.js";
+import "./models/SubEventModel.js";
+import "./models/associations.js"; // <== WAJIB: pasang asosiasi setelah semua model dimuat
 
 dotenv.config();
 const app = express();
@@ -61,9 +61,7 @@ passport.deserializeUser((user, done) => done(null, user));
 app.use("/api", UserRoute);
 app.use("/auth", AuthRoute);
 app.use("/api", EventRoute);
-app.use("/api", SubEventRoute);
-
-
+app.use("/api/subevents", SubEventRoute);
 
 // ===== DB Connection =====
 try {

@@ -407,27 +407,42 @@ const SubEventDetails = () => {
         </div>
       </nav>
       <div>
-        <h1>Sub Event Details for Event {eventId}</h1>
-
-        <button
-          onClick={handleAddSubEvent}
+        <h1
           style={{
-            backgroundColor: "#007BFF",
-            color: "white",
-            padding: "1rem 2rem",
-            borderRadius: "8px",
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
             fontWeight: "bold",
-            fontSize: "1rem",
-            cursor: "pointer",
-            border: "none",
-            marginBottom: "2rem",
+            fontSize: "2rem",
+            marginTop: "2rem",
+            letterSpacing: "0.05em",
+            marginBottom: "1rem",
+            textAlign: "center",
           }}
         >
-          Add New Sub Event
-        </button>
+          Sub Event Information
+        </h1>
+
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button
+            onClick={handleAddSubEvent}
+            style={{
+              backgroundColor: "#0D1A2A",
+              color: "white",
+              padding: "1rem 2rem",
+              borderRadius: "15px",
+              fontWeight: "bold",
+              fontSize: "2rem",
+              cursor: "pointer",
+              border: "none",
+              marginBottom: "2rem",
+              textAlign: "center",
+            }}
+          >
+            + Add New Sub Event
+          </button>
+        </div>
 
         <div className="container mt-5">
-          <h2 className="title is-4">Sub Events</h2>
           {Array.isArray(subEvents) && subEvents.length > 0 ? (
             <div className="columns is-multiline">
               {subEvents.map((subEvent) => (
@@ -438,30 +453,129 @@ const SubEventDetails = () => {
                       style={{ cursor: "pointer" }}
                       onClick={() => handleSubEventClick(subEvent.id)}
                     >
-                      <p className="title is-5">{subEvent.title}</p>
-                      <p className="subtitle is-6">
-                        <strong>Organizer:</strong>{" "}
-                        {subEvent.organizer || "Unknown"}
+                      <p
+                        className="title is-5"
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: "bold",
+                          fontSize: "1.5rem",
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        {subEvent.title}
                       </p>
-                      <p>
-                        <strong>Description:</strong> {subEvent.description}
+                      <p
+                        className="subtitle is-6"
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: "bold",
+                          fontSize: "1rem",
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em",
+                          marginBottom: "2rem",
+                        }}
+                      >
+                        {" "}
+                        Organized by {subEvent.organizer || "Unknown"}
                       </p>
-                      <p>
-                        <strong>Additional Description:</strong>{" "}
-                        {subEvent.additional_description}
+                      <p
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: "normal",
+                          fontSize: "1rem",
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Description
+                        <span style={{ marginLeft: "7.2rem" }}>
+                          : {subEvent.description}
+                        </span>
                       </p>
-                      <p>
-                        <strong>Date:</strong> {subEvent.date}
+                      <p
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: "normal",
+                          fontSize: "1rem",
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Additional Description{" "}
+                        <span style={{ marginLeft: "1rem" }}>
+                          : {subEvent.additional_description}
+                        </span>
                       </p>
-                      <p>
-                        <strong>Time:</strong> {subEvent.time}
+                      <p
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: "normal",
+                          fontSize: "1rem",
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Date{" "}
+                        <span style={{ marginLeft: "10.5rem" }}>
+                          : {subEvent.date}
+                        </span>
                       </p>
-                      <p>
-                        <strong>Location:</strong> {subEvent.location}
+                      <p
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: "normal",
+                          fontSize: "1rem",
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Time:{" "}
+                        <span style={{ marginLeft: "10.2rem" }}>
+                          : {subEvent.time}
+                        </span>
                       </p>
-                      <p>
-                        <strong>Task or Agenda:</strong>{" "}
-                        {subEvent.task_or_agenda}
+                      <p
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: "normal",
+                          fontSize: "1rem",
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        Location:{" "}
+                        <span style={{ marginLeft: "8.1rem" }}>
+                          : {subEvent.location}
+                        </span>
+                      </p>
+                      <p
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: "normal",
+                          fontSize: "1rem",
+                          marginTop: "0.7rem",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        Event Type:{" "}
+                        <span style={{ marginLeft: "6.9rem" }}>
+                          : {subEvent.task_or_agenda}
+                        </span>
                       </p>
                     </div>
 
@@ -469,7 +583,19 @@ const SubEventDetails = () => {
                     <footer className="card-footer">
                       <div className="card-footer-item">
                         <button
+                          style={{
+                            backgroundColor: "#A80000",
+                            color: "#FFFFFF",
+                          }}
                           onClick={() => handleDeleteSubEvent(subEvent.id)}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "#DB0101";
+                            e.currentTarget.style.color = "#000000"; // misalnya jadi kuning saat hover
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "#A80000";
+                            e.currentTarget.style.color = "#FFFFFF"; // kembali ke putih
+                          }}
                           className="button is-danger is-light is-fullwidth"
                         >
                           Delete

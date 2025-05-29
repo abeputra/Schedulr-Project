@@ -561,7 +561,7 @@ const PerSubEvent = () => {
             textAlign: "center",
           }}
         >
-          Sub-Event Detail
+          Sub Event Detail
         </h1>
 
         <div

@@ -339,7 +339,7 @@ const DashboardPage = () => {
           <div
             className="is-flex is-align-items-center"
             style={{
-              gap: "1rem",
+              gap: "1.5rem",
               flexGrow: 1,
               justifyContent: "flex-end",
               fontWeight: 600,
@@ -347,13 +347,12 @@ const DashboardPage = () => {
             }}
           >
             <div>
-              <div style={{ paddingLeft: "0rem" }}>{date}</div>
+              <div style={{ paddingLeft: "1.3rem" }}>{date}</div>
               <div>
                 {time}
                 <span
                   style={{
-                    paddingRight: "2rem",
-                    marginLeft: "1rem",
+                    marginLeft: "0.5rem",
                     fontWeight: 600,
                     color: "white",
                     fontSize: "clamp(0.5rem, 2vw, 1rem)", // Smaller but responsive
