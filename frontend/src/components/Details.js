@@ -638,6 +638,7 @@ const Details = () => {
             <br />
             <textarea
               className="textarea custom-textarea"
+              name="description"
               value={subEvent.description}
               onChange={handleInputChange}
               required
@@ -667,6 +668,7 @@ const Details = () => {
             <br />
             <textarea
               className="textarea custom-textarea"
+              name="additional_description"
               value={subEvent.additional_description}
               onChange={handleInputChange}
               required

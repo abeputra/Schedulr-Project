@@ -27,7 +27,7 @@ export const checkConflict = async (req, res) => {
             e.id, e.title as event_title,
             s.title as subevent_title, s.date, s.time, s.location
         FROM events e
-        LEFT JOIN sub_events s ON e.id = s."eventId"  -- Perhatikan "eventId" dengan huruf besar I
+        LEFT JOIN sub_events s ON e.id = s."eventId" 
         LIMIT 10
         `);
       
@@ -88,7 +88,8 @@ export const checkConflict = async (req, res) => {
     }
     console.log('Formatted Events:', JSON.stringify(formattedEvents, null, 2));
     // 3. Kirim ke OpenAI
-    const prompt = `User Query: ${req.body.userQuery || "Cek konflik"}
+    const userQuery = req.body.userQuery || req.body.message || "Cek konflik";
+    const prompt = `User Query: ${userQuery}
     Event Data: ${JSON.stringify(formattedEvents, null, 2)}
         
     Analisis dalam Bahasa Indonesia:
@@ -104,7 +105,7 @@ export const checkConflict = async (req, res) => {
 
     // 4. Response ke client
     res.json({
-      analysis: response.choices[0].message.content,
+      response: response.choices[0].message.content, // <-- ini yang dibutuhkan FE
       debug: { 
         eventCount: formattedEvents.length,
         sampleEvent: formattedEvents[0] 
