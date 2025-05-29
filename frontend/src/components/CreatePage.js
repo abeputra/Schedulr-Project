@@ -834,7 +834,16 @@ const CreatePage = () => {
                     ></div>
                     <div className="modal-card">
                       <header className="modal-card-head">
-                        <p className="modal-card-title">Edit Event</p>
+                        <p
+                          className="modal-card-title"
+                          style={{
+                            color: "#0D1A2A",
+                            fontSize: "2rem",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Edit Event
+                        </p>
                         <button
                           className="delete"
                           aria-label="close"
@@ -843,7 +852,16 @@ const CreatePage = () => {
                       </header>
                       <section className="modal-card-body">
                         <div className="field">
-                          <label className="label">Title</label>
+                          <label
+                            className="label"
+                            style={{
+                              color: "#0D1A2A",
+                              fontSize: "1.2rem",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Title
+                          </label>
                           <input
                             className="input"
                             type="text"
@@ -858,7 +876,16 @@ const CreatePage = () => {
                         </div>
 
                         <div className="field">
-                          <label className="label">Organizer</label>
+                          <label
+                            className="label"
+                            style={{
+                              color: "#0D1A2A",
+                              fontSize: "1.2rem",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Organizer
+                          </label>
                           <input
                             className="input"
                             type="text"
@@ -873,7 +900,16 @@ const CreatePage = () => {
                         </div>
 
                         <div className="field">
-                          <label className="label">Description</label>
+                          <label
+                            className="label"
+                            style={{
+                              color: "#0D1A2A",
+                              fontSize: "1.2rem",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Description
+                          </label>
                           <textarea
                             className="textarea"
                             value={selectedEvent.description}
@@ -887,7 +923,16 @@ const CreatePage = () => {
                         </div>
 
                         <div className="field">
-                          <label className="label">Invited Members</label>
+                          <label
+                            className="label"
+                            style={{
+                              color: "#0D1A2A",
+                              fontSize: "1.2rem",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Invited Members
+                          </label>
                           <div className="tags">
                             {selectedEvent.invited_members.map(
                               (email, index) => (

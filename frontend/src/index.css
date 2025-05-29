@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #f5f5f5;
 }
 
@@ -46,7 +46,51 @@ body {
   background-color: rgba(20, 20, 20, 0.3) !important;
 }
 
+/* Modal card styling */
 .modal-card {
-  background-color: #1e1e1e !important; /* atau warna lain */
-  opacity: 1 !important;
+  background-color: #ffffff !important;
+  color: #0d1a2a !important;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  font-family: "Poppins", sans-serif;
+}
+
+.modal-card-head,
+.modal-card-body,
+.modal-card-foot {
+  background-color: #ffffff !important;
+  color: #0d1a2a !important;
+  border: none !important;
+}
+
+/* Input dan textarea font */
+input,
+textarea,
+select,
+button {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.tag.is-info {
+  font-size: 1.1rem !important;
+  padding: 0.4em 0.8em !important;
+  background-color: #f38b40 !important; /* Ganti warna background */
+  border-radius: 8px;
+  color: white !important;
+}
+
+.tag.is-info .delete {
+  all: unset; /* Reset semua bawaan Bulma */
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 2rem;
+  margin-left: 0.5rem;
+  color: white;
+  background-color: #930101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
 }
