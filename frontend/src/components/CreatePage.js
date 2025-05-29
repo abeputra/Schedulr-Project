@@ -784,7 +784,16 @@ const CreatePage = () => {
                     ></div>
                     <div className="modal-card">
                       <header className="modal-card-head">
-                        <p className="modal-card-title">Event Details</p>
+                        <p
+                          className="modal-card-title"
+                          style={{
+                            color: "#0D1A2A",
+                            fontSize: "2rem",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Event Details
+                        </p>
                         <button
                           className="delete"
                           aria-label="close"
@@ -793,22 +802,74 @@ const CreatePage = () => {
                       </header>
                       <section className="modal-card-body">
                         <div className="content">
-                          <p>
-                            <strong>Title:</strong> {modalEvent.title}
+                          <p
+                            style={{
+                              fontSize: "1.2rem",
+                              marginBottom: "0.5rem",
+                            }}
+                          >
+                            <span
+                              style={{ color: "#0D1A2A", fontWeight: "bold" }}
+                            >
+                              Title{" "}
+                            </span>
+                            <span style={{ color: "#333", marginLeft: "8rem" }}>
+                              : {modalEvent.title}
+                            </span>
                           </p>
-                          <p>
-                            <strong>Organizer:</strong> {modalEvent.organizer}
+                          <p
+                            style={{
+                              fontSize: "1.2rem",
+                              marginBottom: "0.5rem",
+                            }}
+                          >
+                            <span
+                              style={{ color: "#0D1A2A", fontWeight: "bold" }}
+                            >
+                              Organizer{" "}
+                            </span>
+                            <span
+                              style={{ color: "#333", marginLeft: "4.5rem" }}
+                            >
+                              : {modalEvent.organizer}
+                            </span>
                           </p>
-                          <p>
-                            <strong>Description:</strong>{" "}
-                            {modalEvent.description}
+                          <p
+                            style={{
+                              fontSize: "1.2rem",
+                              marginBottom: "0.5rem",
+                            }}
+                          >
+                            <span
+                              style={{ color: "#0D1A2A", fontWeight: "bold" }}
+                            >
+                              Description{" "}
+                            </span>
+                            <span
+                              style={{ color: "#333", marginLeft: "3.5rem" }}
+                            >
+                              : {modalEvent.description}
+                            </span>
                           </p>
-                          <p>
-                            <strong>Invited Members:</strong>
+
+                          <p
+                            style={{
+                              fontSize: "1.2rem",
+                              color: "#0D1A2A",
+                              fontWeight: "bold",
+                              marginTop: "3rem",
+                            }}
+                          >
+                            Invited Members:
                           </p>
                           <ul>
                             {modalEvent.invited_members.map((email, index) => (
-                              <li key={index}>📧 {email}</li>
+                              <li
+                                key={index}
+                                style={{ fontSize: "1.2rem", color: "#0D1A2A" }}
+                              >
+                                {email}
+                              </li>
                             ))}
                           </ul>
                         </div>
@@ -817,6 +878,15 @@ const CreatePage = () => {
                         <button
                           className="button"
                           onClick={() => setShowModal(false)}
+                          style={{ backgroundColor: "#0D1A2A" }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "#F38B40";
+                            e.currentTarget.style.color = "#FFFFFF"; // ubah font jadi putih saat hover
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "#0D1A2A"; // kembali ke warna asal
+                            e.currentTarget.style.color = "#FFFFFF"; // font kembali ke asal
+                          }}
                         >
                           Close
                         </button>
