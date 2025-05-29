@@ -6,32 +6,42 @@ const ChatbotPage = () => {
 
   const handleChatSubmit = async (e) => {
     e.preventDefault();
-
     if (!chatInput.trim()) return;
 
-    // Tambahkan pesan user ke history
     const newMessage = { role: "user", content: chatInput };
     setChatHistory((prev) => [...prev, newMessage]);
 
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setChatHistory((prev) => [
+          ...prev,
+          { role: "assistant", content: "You are not logged in." },
+        ]);
+        return;
+      }
       const response = await fetch("http://localhost:5000/api/check", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ message: chatInput }),
       });
 
       const data = await response.json();
-
-      // Tambahkan respon bot ke history
-      const botMessage = { role: "bot", content: data.reply };
-      setChatHistory((prev) => [...prev, botMessage]);
+      setChatHistory((prev) => [
+        ...prev,
+        { role: "assistant", content: data.response },
+      ]);
+      setChatInput("");
     } catch (error) {
       console.error("Chatbot error:", error);
+      setChatHistory((prev) => [
+        ...prev,
+        { role: "assistant", content: "Sorry, there was an error." },
+      ]);
     }
-
-    setChatInput(""); // Kosongkan input
   };
 
   return (
