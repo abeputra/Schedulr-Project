@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import logo from "../assets/schedulr-logo-horizontal.png";
+import backgroundMotif from "../assets/background-motif.png";
 import {
   FaTachometerAlt,
   FaPlus,
@@ -329,7 +330,9 @@ const Details = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "white", minHeight: "100vh" }}>
+    <div
+      style={{ backgroundImage: `url(${backgroundMotif})`, minHeight: "100vh" }}
+    >
       {" "}
       {/* Apply white background here */}
       {/* Overlay (Dim effect) */}
@@ -590,220 +593,30 @@ const Details = () => {
           </div>
         </div>
       </nav>
-      <div style={{ padding: "24px", maxWidth: "700px" }}>
-        <h2>Add Sub Event</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 500,
-                fontSize: "1.2rem",
-              }}
-            >
-              Title:
-            </label>
-            <br />
-            <input
-              className="input"
-              type="text"
-              name="title"
-              value={subEvent.title}
-              onChange={handleInputChange}
-              required
-              placeholder="Enter the title"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontStyle: "italic",
-                fontSize: "1.2rem",
-                height: "3.5rem",
-                borderRadius: "0.8rem",
-                marginBottom: "1rem",
-              }}
-            />
-          </div>
-
-          <div>
-            <label
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 500,
-                fontSize: "1.2rem",
-              }}
-            >
-              Description:
-            </label>
-            <br />
-            <textarea
-              className="textarea custom-textarea"
-              value={subEvent.description}
-              onChange={handleInputChange}
-              required
-              placeholder="Enter the description"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontStyle: "italic",
-                fontSize: "1.2rem",
-                height: "3.5rem",
-                borderRadius: "0.8rem",
-                marginBottom: "1.5rem",
-              }}
-            />
-          </div>
-
-          <div>
-            <label
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 500,
-                fontSize: "1.2rem",
-              }}
-            >
-              Additional Description:
-            </label>
-            <br />
-            <textarea
-              className="textarea custom-textarea"
-              value={subEvent.additional_description}
-              onChange={handleInputChange}
-              required
-              placeholder="Enter the description"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontStyle: "italic",
-                fontSize: "1.2rem",
-                height: "3.5rem",
-                borderRadius: "0.8rem",
-                marginBottom: "1.5rem",
-              }}
-            />
-          </div>
-
-          <div>
-            <label
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 500,
-                fontSize: "1.2rem",
-              }}
-            >
-              Date:
-            </label>
-            <br />
-            <input
-              className="input"
-              type="date"
-              name="date"
-              value={subEvent.date}
-              onChange={handleInputChange}
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontStyle: "italic",
-                fontSize: "1.2rem",
-                height: "3.5rem",
-                borderRadius: "0.8rem",
-                marginBottom: "1rem",
-              }}
-            />
-          </div>
-
-          <div>
-            <label
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 500,
-                fontSize: "1.2rem",
-              }}
-            >
-              Time:
-            </label>
-            <br />
-            <input
-              className="input"
-              type="time"
-              name="time"
-              value={subEvent.time}
-              onChange={handleInputChange}
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontStyle: "italic",
-                fontSize: "1.2rem",
-                height: "3.5rem",
-                borderRadius: "0.8rem",
-                marginBottom: "1rem",
-              }}
-            />
-          </div>
-
-          <div>
-            <label
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 500,
-                fontSize: "1.2rem",
-              }}
-            >
-              Location:
-            </label>
-            <br />
-            <input
-              className="input"
-              type="text"
-              name="location"
-              value={subEvent.location}
-              onChange={handleInputChange}
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontStyle: "italic",
-                fontSize: "1.2rem",
-                height: "3.5rem",
-                borderRadius: "0.8rem",
-                marginBottom: "1rem",
-              }}
-            />
-          </div>
-
-          <div>
-            <label
-              style={{
-                color: "#0D1A2A",
-                fontFamily: "'Poppins', sans-serif",
-                fontWeight: 500,
-                fontSize: "1.2rem",
-              }}
-            >
-              Task or Agenda:
-            </label>
-            <br />
-            <select
-              name="taskOrAgenda"
-              value={subEvent.taskOrAgenda}
-              onChange={handleInputChange}
-              className="input"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontStyle: "italic",
-                fontSize: "1.2rem",
-                height: "3.5rem",
-                borderRadius: "0.8rem",
-                marginBottom: "1rem",
-              }}
-            >
-              <option value="task">Task Distribution</option>
-              <option value="agenda">Agenda</option>
-            </select>
-          </div>
-
-          {(subEvent.taskOrAgenda === "task" ||
-            subEvent.taskOrAgenda === "agenda") && (
-            <div style={{ marginTop: "20px" }}>
-              <h3
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <div style={{ padding: "24px", width: "75%" }}>
+          <h2
+            className="title is-4"
+            style={{
+              color: "#0D1A2A",
+              marginTop: "5rem",
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 700,
+              fontSize: "2rem", // misalnya 2rem = 32px
+            }}
+          >
+            Add New Sub Event
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label
                 style={{
                   color: "#0D1A2A",
                   fontFamily: "'Poppins', sans-serif",
@@ -811,160 +624,409 @@ const Details = () => {
                   fontSize: "1.2rem",
                 }}
               >
-                {subEvent.taskOrAgenda === "task"
-                  ? "Assign Tasks"
-                  : "Assign Members"}
-              </h3>
+                Title:
+              </label>
+              <br />
+              <input
+                className="input"
+                type="text"
+                name="title"
+                value={subEvent.title}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter the title"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginTop: "0.5rem",
+                  marginBottom: "1rem",
+                  backgroundColor: "#0d1a2a",
+                }}
+              />
+            </div>
 
-              <table className="table is-fullwidth is-bordered is-striped">
-                <thead>
-                  <tr>
-                    <th>Assigned Member</th>
-                    {subEvent.taskOrAgenda === "task" && <th>Task Type</th>}
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div className="select is-fullwidth">
-                        <select
-                          value={selectedMember}
-                          onChange={(e) => setSelectedMember(e.target.value)}
+            <div>
+              <label
+                style={{
+                  color: "#0D1A2A",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "1.2rem",
+                }}
+              >
+                Description:
+              </label>
+              <br />
+              <textarea
+                className="textarea custom-textarea"
+                value={subEvent.description}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter the description"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginTop: "0.5rem",
+                  marginBottom: "1rem",
+                  backgroundColor: "#0d1a2a",
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  color: "#0D1A2A",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "1.2rem",
+                }}
+              >
+                Additional Description:
+              </label>
+              <br />
+              <textarea
+                className="textarea custom-textarea"
+                value={subEvent.additional_description}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter the description"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginTop: "0.5rem",
+                  marginBottom: "1rem",
+                  backgroundColor: "#0d1a2a",
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  color: "#0D1A2A",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "1.2rem",
+                }}
+              >
+                Date:
+              </label>
+              <br />
+              <input
+                className="input"
+                type="date"
+                name="date"
+                value={subEvent.date}
+                onChange={handleInputChange}
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginTop: "0.5rem",
+                  marginBottom: "1rem",
+                  backgroundColor: "#0d1a2a",
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  color: "#0D1A2A",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "1.2rem",
+                }}
+              >
+                Time:
+              </label>
+              <br />
+              <input
+                className="input"
+                type="time"
+                name="time"
+                value={subEvent.time}
+                onChange={handleInputChange}
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginTop: "0.5rem",
+                  marginBottom: "1rem",
+                  backgroundColor: "#0d1a2a",
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  color: "#0D1A2A",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "1.2rem",
+                }}
+              >
+                Location:
+              </label>
+              <br />
+              <input
+                className="input"
+                type="text"
+                name="location"
+                value={subEvent.location}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter the location"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginTop: "0.5rem",
+                  marginBottom: "1rem",
+                  backgroundColor: "#0d1a2a",
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  color: "#0D1A2A",
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "1.2rem",
+                }}
+              >
+                Task or Agenda:
+              </label>
+              <br />
+              <select
+                name="taskOrAgenda"
+                value={subEvent.taskOrAgenda}
+                onChange={handleInputChange}
+                className="input"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "1.2rem",
+                  height: "3.5rem",
+                  borderRadius: "0.8rem",
+                  marginTop: "0.5rem",
+                  marginBottom: "1rem",
+                  backgroundColor: "#0d1a2a",
+                }}
+              >
+                <option value="task">Task Distribution</option>
+                <option value="agenda">Agenda</option>
+              </select>
+            </div>
+
+            {(subEvent.taskOrAgenda === "task" ||
+              subEvent.taskOrAgenda === "agenda") && (
+              <div style={{ marginTop: "20px" }}>
+                <h3
+                  style={{
+                    color: "#0D1A2A",
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 500,
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  {subEvent.taskOrAgenda === "task"
+                    ? "Assign Tasks"
+                    : "Assign Members"}
+                </h3>
+
+                <table
+                  className="table is-fullwidth is-striped"
+                  style={{
+                    backgroundColor: "#0d1a2a",
+                    borderRadius: "15px",
+                    border: "none",
+                    borderCollapse: "collapse",
+                    marginTop: "0.5rem",
+                    tableLayout: "fixed",
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      <th colSpan={subEvent.taskOrAgenda === "task" ? 3 : 2}>
+                        <div
                           style={{
-                            fontFamily: "'Poppins', sans-serif",
-                            fontSize: "1rem",
-                            height: "3rem",
-                            borderRadius: "0.6rem",
+                            display: "flex",
+                            gap: "1rem",
+                            alignItems: "center",
                           }}
                         >
-                          <option value="">Select Member</option>
-                          {invitedMembers
-                            .filter(
-                              (email) =>
-                                !assignedTasks.some(
-                                  (task) => task.email === email
-                                )
-                            )
-                            .map((email, index) => (
-                              <option key={index} value={email}>
-                                {email}
-                              </option>
-                            ))}
-                        </select>
-                      </div>
-                    </td>
-
-                    {subEvent.taskOrAgenda === "task" && (
-                      <td>
-                        <div className="select is-fullwidth">
-                          <select
-                            value={selectedTaskType}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              if (value === "__add_new__") {
-                                const newType = window.prompt(
-                                  "Enter new task type:"
-                                );
-                                if (newType && !taskTypes.includes(newType)) {
-                                  setTaskTypes((prev) => [...prev, newType]);
-                                  setSelectedTaskType(newType);
-                                }
-                              } else {
-                                setSelectedTaskType(value);
-                              }
-                            }}
-                            style={{
-                              fontFamily: "'Poppins', sans-serif",
-                              fontSize: "1rem",
-                              height: "3rem",
-                              borderRadius: "0.6rem",
-                            }}
+                          <span style={{ flex: 1 }}>Assigned Member</span>
+                          {subEvent.taskOrAgenda === "task" && (
+                            <span style={{ flex: 1.1 }}>Task Type</span>
+                          )}
+                          <span style={{ width: "auto" }}></span>{" "}
+                          {/* spacer for Add button */}
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colSpan={subEvent.taskOrAgenda === "task" ? 3 : 2}>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "1rem", // spasi antar elemen
+                            alignItems: "center",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          {/* Select Member */}
+                          <div
+                            className="select is-fullwidth"
+                            style={{ flex: 1 }}
                           >
-                            <option value="">Select Task Type</option>
-                            {taskTypes.map((type) => (
-                              <option key={type} value={type}>
-                                {type}
-                              </option>
-                            ))}
-                            <option value="__add_new__">+ Add new...</option>
-                          </select>
+                            <select
+                              value={selectedMember}
+                              onChange={(e) =>
+                                setSelectedMember(e.target.value)
+                              }
+                              style={{
+                                fontFamily: "'Poppins', sans-serif",
+                                fontSize: "1rem",
+                                height: "3rem",
+                                borderRadius: "0.6rem",
+                                backgroundColor: "#FFFFFF",
+                                color: "#0D1A2A",
+                                width: "100%",
+                              }}
+                            >
+                              <option value="">Select Member</option>
+                              {invitedMembers
+                                .filter(
+                                  (email) =>
+                                    !assignedTasks.some(
+                                      (task) => task.email === email
+                                    )
+                                )
+                                .map((email, index) => (
+                                  <option key={index} value={email}>
+                                    {email}
+                                  </option>
+                                ))}
+                            </select>
+                          </div>
+
+                          {/* Task Type (if applicable) */}
+                          {subEvent.taskOrAgenda === "task" && (
+                            <div
+                              className="select is-fullwidth"
+                              style={{ flex: 1 }}
+                            >
+                              <select
+                                value={selectedTaskType}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  if (value === "__add_new__") {
+                                    const newType = window.prompt(
+                                      "Enter new task type:"
+                                    );
+                                    if (
+                                      newType &&
+                                      !taskTypes.includes(newType)
+                                    ) {
+                                      setTaskTypes((prev) => [
+                                        ...prev,
+                                        newType,
+                                      ]);
+                                      setSelectedTaskType(newType);
+                                    }
+                                  } else {
+                                    setSelectedTaskType(value);
+                                  }
+                                }}
+                                style={{
+                                  fontFamily: "'Poppins', sans-serif",
+                                  fontSize: "1rem",
+                                  height: "3rem",
+                                  borderRadius: "0.6rem",
+                                  backgroundColor: "#FFFFFF",
+                                  color: "#0D1A2A",
+                                  width: "100%",
+                                }}
+                              >
+                                <option value="">Select Task Type</option>
+                                {taskTypes.map((type) => (
+                                  <option key={type} value={type}>
+                                    {type}
+                                  </option>
+                                ))}
+                                <option value="__add_new__">
+                                  + Add new...
+                                </option>
+                              </select>
+                            </div>
+                          )}
+
+                          {/* Add button */}
+                          <div>
+                            <button
+                              type="button"
+                              className="button is-link"
+                              onClick={handleAddAssignment}
+                              style={{ height: "3rem" }}
+                            >
+                              Add
+                            </button>
+                          </div>
                         </div>
                       </td>
-                    )}
+                    </tr>
+                  </tbody>
+                </table>
 
-                    <td>
-                      <button
-                        type="button"
-                        className="button is-link"
-                        onClick={handleAddAssignment}
-                        style={{ height: "3rem" }}
-                      >
-                        Add
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                {assignedTasks.length > 0 && (
+                  <div style={{ marginTop: "1.5rem" }}>
+                    <h4 className="title is-5" style={{ color: "#0D1A2A" }}>
+                      {subEvent.taskOrAgenda === "task"
+                        ? "Assigned Tasks"
+                        : "Assigned Members"}
+                    </h4>
 
-              {assignedTasks.length > 0 && (
-                <div style={{ marginTop: "1.5rem" }}>
-                  <h4 className="title is-5" style={{ color: "#0D1A2A" }}>
-                    {subEvent.taskOrAgenda === "task"
-                      ? "Assigned Tasks"
-                      : "Assigned Members"}
-                  </h4>
-
-                  <table className="table is-fullwidth is-hoverable">
-                    <thead>
-                      <tr>
-                        <th>Member</th>
-                        {subEvent.taskOrAgenda === "task" && <th>Task</th>}
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {assignedTasks.map(({ email, taskType }, index) => (
-                        <tr key={email}>
-                          {editIndex === index ? (
-                            <>
-                              <td>
-                                <div className="select is-fullwidth">
-                                  <select
-                                    value={editMember}
-                                    onChange={(e) =>
-                                      setEditMember(e.target.value)
-                                    }
-                                    style={{
-                                      fontFamily: "'Poppins', sans-serif",
-                                      fontSize: "1rem",
-                                      height: "2.8rem",
-                                    }}
-                                  >
-                                    {invitedMembers
-                                      .filter(
-                                        (member) =>
-                                          member === email ||
-                                          !assignedTasks.some(
-                                            (t, i) =>
-                                              t.email === member && i !== index
-                                          )
-                                      )
-                                      .map((member, i) => (
-                                        <option key={i} value={member}>
-                                          {member}
-                                        </option>
-                                      ))}
-                                  </select>
-                                </div>
-                              </td>
-                              {subEvent.taskOrAgenda === "task" && (
+                    <table className="table is-fullwidth is-hoverable">
+                      <thead>
+                        <tr>
+                          <th>Member</th>
+                          {subEvent.taskOrAgenda === "task" && <th>Task</th>}
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {assignedTasks.map(({ email, taskType }, index) => (
+                          <tr key={email}>
+                            {editIndex === index ? (
+                              <>
                                 <td>
                                   <div className="select is-fullwidth">
                                     <select
-                                      value={editTaskType}
+                                      value={editMember}
                                       onChange={(e) =>
-                                        setEditTaskType(e.target.value)
+                                        setEditMember(e.target.value)
                                       }
                                       style={{
                                         fontFamily: "'Poppins', sans-serif",
@@ -972,63 +1034,150 @@ const Details = () => {
                                         height: "2.8rem",
                                       }}
                                     >
-                                      <option value="">Select Task Type</option>
-                                      {taskTypes.map((type) => (
-                                        <option key={type} value={type}>
-                                          {type}
-                                        </option>
-                                      ))}
+                                      {invitedMembers
+                                        .filter(
+                                          (member) =>
+                                            member === email ||
+                                            !assignedTasks.some(
+                                              (t, i) =>
+                                                t.email === member &&
+                                                i !== index
+                                            )
+                                        )
+                                        .map((member, i) => (
+                                          <option key={i} value={member}>
+                                            {member}
+                                          </option>
+                                        ))}
                                     </select>
                                   </div>
                                 </td>
-                              )}
-                              <td>
-                                <button
-                                  className="button is-success mr-2"
-                                  onClick={handleSaveEdit}
-                                >
-                                  Save
-                                </button>
-                                <button className="button" onClick={cancelEdit}>
-                                  Cancel
-                                </button>
-                              </td>
-                            </>
-                          ) : (
-                            <>
-                              <td>{email}</td>
-                              {subEvent.taskOrAgenda === "task" && (
-                                <td>{taskType}</td>
-                              )}
-                              <td>
-                                <button
-                                  className="button is-info mr-2"
-                                  onClick={() => handleEdit(index)}
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  className="button is-danger"
-                                  onClick={() => handleRemoveAssigned(email)}
-                                >
-                                  Remove
-                                </button>
-                              </td>
-                            </>
-                          )}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          )}
+                                {subEvent.taskOrAgenda === "task" && (
+                                  <td>
+                                    <div className="select is-fullwidth">
+                                      <select
+                                        value={editTaskType}
+                                        onChange={(e) =>
+                                          setEditTaskType(e.target.value)
+                                        }
+                                        style={{
+                                          fontFamily: "'Poppins', sans-serif",
+                                          fontSize: "1rem",
+                                          height: "2.8rem",
+                                        }}
+                                      >
+                                        <option value="">
+                                          Select Task Type
+                                        </option>
+                                        {taskTypes.map((type) => (
+                                          <option key={type} value={type}>
+                                            {type}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                  </td>
+                                )}
+                                <td>
+                                  <button
+                                    className="button is-success mr-2"
+                                    onClick={handleSaveEdit}
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    className="button"
+                                    onClick={cancelEdit}
+                                  >
+                                    Cancel
+                                  </button>
+                                </td>
+                              </>
+                            ) : (
+                              <>
+                                <td>{email}</td>
+                                {subEvent.taskOrAgenda === "task" && (
+                                  <td>{taskType}</td>
+                                )}
+                                <td>
+                                  <button
+                                    className="button is-info mr-2"
+                                    onClick={() => handleEdit(index)}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    className="button is-danger"
+                                    onClick={() => handleRemoveAssigned(email)}
+                                  >
+                                    Remove
+                                  </button>
+                                </td>
+                              </>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
 
-          <div style={{ marginTop: "24px" }}>
-            <button type="submit">Save Sub Event</button>
-          </div>
-        </form>
+            <div style={{ marginTop: "24px" }}>
+              <button
+                type="submit"
+                style={{
+                  backgroundColor: "#0D1A2A",
+                  color: "white",
+                  padding: "0.75rem 1.5rem",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "1rem",
+                  fontFamily: "'Poppins', sans-serif",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s ease",
+                  marginBottom: "5rem",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#F38B40";
+                  e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#0D1A2A"; // kembali ke warna asal
+                  e.currentTarget.style.color = "#white"; // font kembali ke asal
+                }}
+              >
+                Save Sub Event
+              </button>
+              <button
+                type="button"
+                onClick={() => window.history.back()} // atau ganti dengan navigate(-1) / custom onCancel
+                style={{
+                  color: "#0D1A2A",
+                  padding: "0.75rem 1.5rem",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "1rem",
+                  fontFamily: "'Poppins', sans-serif",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s ease",
+                  marginLeft: "1rem",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#930101";
+                  e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#909090"; // kembali ke warna asal
+                  e.currentTarget.style.color = "#white"; // font kembali ke asal
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
