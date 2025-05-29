@@ -8,22 +8,75 @@ import CreatePage from "./components/CreatePage";
 import EventDetails from "./components/EventDetails";
 import SubEventDetails from "./components/SubEventDetails";
 import Details from "./components/Details";
-import PerSubEvent from "./components/PerSubEvent"; // tanpa kurung kurawal
+import PerSubEvent from "./components/PerSubEvent";
+import ProtectedRoute from "./components/ProtectedRoute"; // tambahkan ini
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Tidak dilindungi */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/nextregister" element={<SecondRegisterPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/create" element={<CreatePage />} />
-        <Route path="/details" element={<EventDetails />} />
-        <Route path="/subevent/:eventId" element={<SubEventDetails />} />
-        <Route path="/details/:eventId" element={<Details />} />
-        <Route path="/subevents/detail/:subeventId" element={<PerSubEvent />} />
+
+        {/* Dilindungi */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create"
+          element={
+            <ProtectedRoute>
+              <CreatePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/details"
+          element={
+            <ProtectedRoute>
+              <EventDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subevent/:eventId"
+          element={
+            <ProtectedRoute>
+              <SubEventDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/details/:eventId"
+          element={
+            <ProtectedRoute>
+              <Details />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/subevents/detail/:subeventId"
+          element={
+            <ProtectedRoute>
+              <PerSubEvent />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

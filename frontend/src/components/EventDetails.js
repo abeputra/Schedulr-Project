@@ -307,7 +307,11 @@ const EventDetails = () => {
               </Link>
             </li>
             <li>
-              <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+              <Link
+                to="/"
+                onClick={() => localStorage.removeItem("token")}
+                style={{ color: "white", textDecoration: "none" }}
+              >
                 <FaSignOutAlt style={{ marginRight: "1rem" }} />
                 Logout
               </Link>
@@ -682,20 +686,16 @@ const EventDetails = () => {
                       cursor: !member.trim() ? "not-allowed" : "pointer",
                       opacity: !member.trim() ? 0.5 : 1,
                       color: "#FFFFFF", // warna font default
-                      backgroundColor: "#DA0000", // warna merah default
+                      backgroundColor: "#909090",
                       transition: "background-color 0.3s, color 0.3s",
                     }}
                     onMouseEnter={(e) => {
-                      if (!e.currentTarget.disabled) {
-                        e.currentTarget.style.backgroundColor = "#FF0000";
-                        e.currentTarget.style.color = "#0D1A2A";
-                      }
+                      e.currentTarget.style.backgroundColor = "#930101";
+                      e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
                     }}
                     onMouseLeave={(e) => {
-                      if (!e.currentTarget.disabled) {
-                        e.currentTarget.style.backgroundColor = "#DA0000";
-                        e.currentTarget.style.color = "#FFFFFF";
-                      }
+                      e.currentTarget.style.backgroundColor = "#909090"; // kembali ke warna asal
+                      e.currentTarget.style.color = "white"; // font kembali ke asal
                     }}
                   >
                     Remove
@@ -736,20 +736,20 @@ const EventDetails = () => {
                 type="submit"
                 className="button is-primary"
                 style={{
-                  backgroundColor: "#F38B40",
                   height: "3.5rem",
                   borderRadius: "0.8rem",
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: "1.2rem",
                   whiteSpace: "nowrap",
+                  backgroundColor: "#0D1A2A",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#FF6A00";
+                  e.currentTarget.style.backgroundColor = "#F38B40";
                   e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#F38B40"; // kembali ke warna asal
-                  e.currentTarget.style.color = "#0D1A2A"; // font kembali ke asal
+                  e.currentTarget.style.backgroundColor = "#0D1A2A"; // kembali ke warna asal
+                  e.currentTarget.style.color = "#white"; // font kembali ke asal
                 }}
               >
                 Create Event
@@ -759,20 +759,20 @@ const EventDetails = () => {
                 className="button is-light ml-2"
                 onClick={() => navigate("/dashboard")}
                 style={{
-                  backgroundColor: "#BEBEBE",
                   height: "3.5rem",
                   borderRadius: "0.8rem",
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: "1.2rem",
                   whiteSpace: "nowrap",
+                  backgroundColor: "#909090",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#0D1A2A";
-                  e.currentTarget.style.color = "#FFFFFF"; // ubah font jadi putih saat hover
+                  e.currentTarget.style.backgroundColor = "#930101";
+                  e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#BEBEBE"; // kembali ke warna asal
-                  e.currentTarget.style.color = "#0D1A2A"; // font kembali ke asal
+                  e.currentTarget.style.backgroundColor = "#909090"; // kembali ke warna asal
+                  e.currentTarget.style.color = "#white"; // font kembali ke asal
                 }}
               >
                 Back to Dashboard
