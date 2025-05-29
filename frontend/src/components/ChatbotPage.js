@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-// Komponen untuk menampilkan suggestedModel dengan desain rapi dan tombol kirim event
-const EventSuggestionCard = ({ model, onCreate }) => {
+// Komponen untuk menampilkan suggestedModel dengan desain rapi dan tombol kirim event & edit
+const EventSuggestionCard = ({ model, onCreate, onEdit }) => {
   if (!model) return null;
   return (
     <div
@@ -42,22 +42,40 @@ const EventSuggestionCard = ({ model, onCreate }) => {
       <div style={{ marginBottom: "1rem" }}>
         <strong>Email Pembuat:</strong> {model.creator_email}
       </div>
-      <button
-        onClick={() => onCreate(model)}
-        style={{
-          background: "#F38B40",
-          color: "#fff",
-          border: "none",
-          borderRadius: "1rem",
-          padding: "0.6rem 1.5rem",
-          fontWeight: 600,
-          fontSize: "1rem",
-          cursor: "pointer",
-          marginTop: "0.5rem",
-        }}
-      >
-        Buat Event Ini
-      </button>
+      <div style={{ display: "flex", gap: "0.5rem" }}>
+        <button
+          onClick={() => onCreate(model)}
+          style={{
+            background: "#F38B40",
+            color: "#fff",
+            border: "none",
+            borderRadius: "1rem",
+            padding: "0.6rem 1.5rem",
+            fontWeight: 600,
+            fontSize: "1rem",
+            cursor: "pointer",
+            marginTop: "0.5rem",
+          }}
+        >
+          Buat Event Ini
+        </button>
+        <button
+          onClick={() => onEdit(model)}
+          style={{
+            background: "#fff",
+            color: "#F38B40",
+            border: "2px solid #F38B40",
+            borderRadius: "1rem",
+            padding: "0.6rem 1.5rem",
+            fontWeight: 600,
+            fontSize: "1rem",
+            cursor: "pointer",
+            marginTop: "0.5rem",
+          }}
+        >
+          Edit Event
+        </button>
+      </div>
     </div>
   );
 };
@@ -68,6 +86,7 @@ const ChatbotPage = () => {
   const [mode, setMode] = useState("analisis");
   const [suggestedModel, setSuggestedModel] = useState(null);
   const [createStatus, setCreateStatus] = useState(""); // Untuk notifikasi
+  const [editEvent, setEditEvent] = useState(null); // State untuk edit event
 
   // Fungsi untuk kirim event ke backend
   const handleCreateEvent = async (eventData) => {
@@ -94,12 +113,45 @@ const ChatbotPage = () => {
       const data = await response.json();
       if (response.ok) {
         setCreateStatus("Event berhasil dibuat!");
+        setEditEvent(null);
       } else {
         setCreateStatus(data.message || "Gagal membuat event.");
       }
     } catch (err) {
       setCreateStatus("Terjadi kesalahan saat membuat event.");
     }
+  };
+
+  // Untuk mulai edit event
+  const handleEditEvent = (model) => {
+    setEditEvent({
+      ...model,
+      invited_members: Array.isArray(model.invited_members)
+        ? model.invited_members
+        : typeof model.invited_members === "string"
+        ? model.invited_members.split(",").map((s) => s.trim())
+        : [],
+    });
+    setCreateStatus("");
+  };
+
+  // Untuk handle perubahan input edit
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditEvent((prev) => ({
+      ...prev,
+      [name]:
+        name === "invited_members"
+          ? value.split(",").map((s) => s.trim())
+          : value,
+    }));
+  };
+
+  // Submit hasil edit
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    await handleCreateEvent(editEvent);
+    setEditEvent(null);
   };
 
   const handleChatSubmit = async (e) => {
@@ -147,6 +199,7 @@ const ChatbotPage = () => {
       ]);
       // Set suggestedModel jika ada
       setSuggestedModel(data.suggestedModel || null);
+      setEditEvent(null); // Reset edit jika ada chat baru
       setChatInput("");
     } catch (error) {
       console.error("Chatbot error:", error);
@@ -156,6 +209,40 @@ const ChatbotPage = () => {
       ]);
     }
   };
+
+  // Email validation function (copy dari EventDetails)
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  // Untuk handle perubahan member di edit form
+  const handleEditMemberChange = (index, value) => {
+    setEditEvent((prev) => ({
+      ...prev,
+      invited_members: prev.invited_members.map((m, i) => (i === index ? value : m)),
+    }));
+  };
+
+  const handleAddEditMember = () => {
+    setEditEvent((prev) => ({
+      ...prev,
+      invited_members: [...prev.invited_members, ""],
+    }));
+  };
+
+  const handleRemoveEditMember = (index) => {
+    setEditEvent((prev) => {
+      const newMembers = prev.invited_members.filter((_, i) => i !== index);
+      return {
+        ...prev,
+        invited_members: newMembers.length === 0 ? [""] : newMembers,
+      };
+    });
+  };
+
+  const canAddEditMember =
+    editEvent &&
+    editEvent.invited_members.every(
+      (email) => email.trim() !== "" && isValidEmail(email)
+    );
 
   return (
     <div
@@ -277,9 +364,210 @@ const ChatbotPage = () => {
               </div>
             ))}
             {/* Tampilkan saran event jika ada */}
-            {suggestedModel && (
-              <>
-                <EventSuggestionCard model={suggestedModel} onCreate={handleCreateEvent} />
+            {editEvent ? (
+              <form
+                onSubmit={handleEditSubmit}
+                style={{
+                  background: "#F6F8FA",
+                  border: "2px solid #F38B40",
+                  borderRadius: "1rem",
+                  padding: "1.5rem 2rem",
+                  margin: "1.5rem 0",
+                  maxWidth: "500px",
+                }}
+              >
+                <h3 style={{ color: "#F38B40", marginBottom: "1rem" }}>
+                  Edit Data Event
+                </h3>
+                <div style={{ marginBottom: "0.7rem" }}>
+                  <label>
+                    Judul:
+                    <input
+                      type="text"
+                      name="title"
+                      value={editEvent.title}
+                      onChange={handleEditChange}
+                      style={{
+                        width: "100%",
+                        marginTop: 4,
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "1.1rem",
+                        borderRadius: "0.8rem",
+                        height: "3rem",
+                        marginBottom: "1rem",
+                      }}
+                      required
+                    />
+                  </label>
+                </div>
+                <div style={{ marginBottom: "0.7rem" }}>
+                  <label>
+                    Penyelenggara:
+                    <input
+                      type="text"
+                      name="organizer"
+                      value={editEvent.organizer}
+                      onChange={handleEditChange}
+                      style={{
+                        width: "100%",
+                        marginTop: 4,
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "1.1rem",
+                        borderRadius: "0.8rem",
+                        height: "3rem",
+                        marginBottom: "1rem",
+                      }}
+                      required
+                    />
+                  </label>
+                </div>
+                <div style={{ marginBottom: "0.7rem" }}>
+                  <label>
+                    Deskripsi:
+                    <textarea
+                      name="description"
+                      value={editEvent.description}
+                      onChange={handleEditChange}
+                      style={{
+                        width: "100%",
+                        marginTop: 4,
+                        fontFamily: "'Poppins', sans-serif",
+                        fontSize: "1.1rem",
+                        borderRadius: "0.8rem",
+                        height: "3.5rem",
+                        marginBottom: "1rem",
+                      }}
+                      required
+                    />
+                  </label>
+                </div>
+                <div style={{ marginBottom: "0.7rem" }}>
+                  <label>
+                    Invite Members:
+                    {editEvent.invited_members.map((member, idx) => {
+                      const invalid = member && !isValidEmail(member);
+                      return (
+                        <div
+                          key={idx}
+                          style={{
+                            display: "flex",
+                            gap: "0.5rem",
+                            alignItems: "center",
+                            marginBottom: "0.5rem",
+                            position: "relative",
+                          }}
+                        >
+                          <input
+                            type="email"
+                            value={member}
+                            onChange={(e) => handleEditMemberChange(idx, e.target.value)}
+                            required
+                            placeholder="Enter member's email"
+                            style={{
+                              flex: 1,
+                              fontFamily: "'Poppins', sans-serif",
+                              fontSize: "1.1rem",
+                              borderRadius: "0.8rem",
+                              height: "3rem",
+                              borderColor: invalid ? "red" : "",
+                              boxShadow: invalid ? "0 0 5px red" : "",
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={handleAddEditMember}
+                            disabled={!canAddEditMember}
+                            style={{
+                              height: "3rem",
+                              borderRadius: "0.8rem",
+                              fontFamily: "'Poppins', sans-serif",
+                              fontSize: "1.1rem",
+                              background: "#F38B40",
+                              color: "#fff",
+                              border: "none",
+                              cursor: canAddEditMember ? "pointer" : "not-allowed",
+                            }}
+                          >
+                            Add
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveEditMember(idx)}
+                            disabled={editEvent.invited_members.length === 1}
+                            style={{
+                              height: "3rem",
+                              borderRadius: "0.8rem",
+                              fontFamily: "'Poppins', sans-serif",
+                              fontSize: "1.1rem",
+                              background: "#909090",
+                              color: "#fff",
+                              border: "none",
+                              cursor:
+                                editEvent.invited_members.length === 1
+                                  ? "not-allowed"
+                                  : "pointer",
+                              opacity: editEvent.invited_members.length === 1 ? 0.5 : 1,
+                            }}
+                          >
+                            Remove
+                          </button>
+                          {invalid && (
+                            <span
+                              style={{
+                                position: "absolute",
+                                left: 0,
+                                top: "100%",
+                                color: "#721c24",
+                                background: "#f8d7da",
+                                border: "1px solid #f5c6cb",
+                                borderRadius: "4px",
+                                padding: "2px 8px",
+                                fontSize: "0.9rem",
+                                marginTop: "2px",
+                              }}
+                            >
+                              Invalid email address!
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </label>
+                </div>
+                <button
+                  type="submit"
+                  style={{
+                    background: "#F38B40",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "1rem",
+                    padding: "0.6rem 1.5rem",
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    marginTop: "0.5rem",
+                  }}
+                >
+                  Simpan & Buat Event
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditEvent(null)}
+                  style={{
+                    marginLeft: "1rem",
+                    background: "#fff",
+                    color: "#F38B40",
+                    border: "2px solid #F38B40",
+                    borderRadius: "1rem",
+                    padding: "0.6rem 1.5rem",
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    marginTop: "0.5rem",
+                  }}
+                >
+                  Batal
+                </button>
                 {createStatus && (
                   <div
                     style={{
@@ -291,7 +579,30 @@ const ChatbotPage = () => {
                     {createStatus}
                   </div>
                 )}
-              </>
+              </form>
+            ) : (
+              suggestedModel && (
+                <>
+                  <EventSuggestionCard
+                    model={suggestedModel}
+                    onCreate={handleCreateEvent}
+                    onEdit={handleEditEvent}
+                  />
+                  {createStatus && (
+                    <div
+                      style={{
+                        marginTop: "0.5rem",
+                        color: createStatus.includes("berhasil")
+                          ? "green"
+                          : "red",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {createStatus}
+                    </div>
+                  )}
+                </>
+              )
             )}
           </>
         )}
