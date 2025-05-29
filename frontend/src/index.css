@@ -43,7 +43,7 @@ body {
 }
 
 .modal-background {
-  background-color: rgba(20, 20, 20, 0.3) !important;
+  background-color: rgba(20, 20, 20, 0.5) !important;
 }
 
 /* Modal card styling */
@@ -69,6 +69,7 @@ textarea,
 select,
 button {
   font-family: "Poppins", sans-serif !important;
+  border-radius: 14px !important;
 }
 
 .tag.is-info {
@@ -93,4 +94,49 @@ button {
   border-radius: 50%;
   cursor: pointer;
   position: relative;
+}
+
+.button.is-link {
+  background-color: #f38b40 !important; /* contoh: oranye tua */
+  border-color: #f38b40 !important;
+  color: white !important;
+}
+.button.is-link:hover {
+  background-color: #d6722a !important; /* warna hover */
+  border-color: #d6722a !important;
+}
+
+.modal-card-head .delete {
+  all: unset;
+  background-color: #930101 !important; /* merah */
+  border-radius: 100%;
+  width: 2rem;
+  height: 2rem;
+  opacity: 1;
+  position: relative;
+  margin-left: auto;
+  color: white; /* silang putih */
+}
+
+.modal-card-head .delete::before,
+.modal-card-head .delete::after {
+  background-color: white !important; /* garis silang */
+}
+
+.btn-add:disabled,
+.btn-add[disabled] {
+  background-color: #f38b40 !important;
+  color: #0d1a2a !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.btn-remove:disabled,
+.btn-remove[disabled] {
+  background-color: #da0000 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
 }

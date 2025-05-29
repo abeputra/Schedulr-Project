@@ -856,8 +856,10 @@ const CreatePage = () => {
                             className="label"
                             style={{
                               color: "#0D1A2A",
+                              fontFamily: "'Poppins', sans-serif",
+                              fontWeight: 500,
                               fontSize: "1.2rem",
-                              fontWeight: "bold",
+                              marginBottom: "0.1rem",
                             }}
                           >
                             Title
@@ -872,6 +874,10 @@ const CreatePage = () => {
                                 title: e.target.value,
                               })
                             }
+                            style={{
+                              fontSize: "1.1rem",
+                              marginBottom: "0.5rem",
+                            }}
                           />
                         </div>
 
@@ -880,8 +886,10 @@ const CreatePage = () => {
                             className="label"
                             style={{
                               color: "#0D1A2A",
+                              fontFamily: "'Poppins', sans-serif",
+                              fontWeight: 500,
                               fontSize: "1.2rem",
-                              fontWeight: "bold",
+                              marginBottom: "0.1rem",
                             }}
                           >
                             Organizer
@@ -896,6 +904,10 @@ const CreatePage = () => {
                                 organizer: e.target.value,
                               })
                             }
+                            style={{
+                              fontSize: "1.1rem",
+                              marginBottom: "0.5rem",
+                            }}
                           />
                         </div>
 
@@ -904,8 +916,10 @@ const CreatePage = () => {
                             className="label"
                             style={{
                               color: "#0D1A2A",
+                              fontFamily: "'Poppins', sans-serif",
+                              fontWeight: 500,
                               fontSize: "1.2rem",
-                              fontWeight: "bold",
+                              marginBottom: "0.1rem",
                             }}
                           >
                             Description
@@ -919,6 +933,10 @@ const CreatePage = () => {
                                 description: e.target.value,
                               })
                             }
+                            style={{
+                              fontSize: "1.1rem",
+                              marginBottom: "0.5rem",
+                            }}
                           ></textarea>
                         </div>
 
@@ -927,8 +945,10 @@ const CreatePage = () => {
                             className="label"
                             style={{
                               color: "#0D1A2A",
-                              fontSize: "1.2rem",
+                              fontFamily: "'Poppins', sans-serif",
                               fontWeight: "bold",
+                              fontSize: "1.2rem",
+                              marginTop: "2rem",
                             }}
                           >
                             Invited Members
@@ -946,20 +966,35 @@ const CreatePage = () => {
                               )
                             )}
                           </div>
-                          <div className="field has-addons mt-2">
+                          <div
+                            className="field has-addons mt-2"
+                            style={{
+                              display: "flex",
+                              gap: "0.75rem",
+                              marginTop: "1rem",
+                            }}
+                          >
                             <div className="control is-expanded">
                               <input
                                 className="input"
                                 type="email"
-                                placeholder="Add member email"
+                                placeholder="Add new member by email"
                                 value={emailInput}
                                 onChange={handleEmailChange}
+                                style={{
+                                  fontSize: "1.1rem",
+                                  fontStyle: "italic",
+                                  marginTop: "1rem",
+                                }}
                               />
                             </div>
                             <div className="control">
                               <button
                                 className="button is-link"
                                 onClick={handleAddEmail}
+                                style={{
+                                  marginTop: "1rem",
+                                }}
                               >
                                 Add
                               </button>
@@ -967,16 +1002,31 @@ const CreatePage = () => {
                           </div>
                         </div>
                       </section>
-                      <footer className="modal-card-foot">
+                      <footer
+                        className="modal-card-foot"
+                        style={{
+                          display: "flex",
+                          gap: "0.75rem",
+                          marginTop: "0.1rem",
+                        }}
+                      >
                         <button
                           className="button is-success"
                           onClick={handleEditSave}
+                          style={{
+                            backgroundColor: "#0D1A2A",
+                            color: "#FFFFFF",
+                          }}
                         >
                           Save Changes
                         </button>
                         <button
                           className="button"
                           onClick={() => setIsEditModalOpen(false)}
+                          style={{
+                            backgroundColor: "#930101",
+                            color: "#FFFFFF",
+                          }}
                         >
                           Cancel
                         </button>

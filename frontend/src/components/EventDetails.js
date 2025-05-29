@@ -649,7 +649,7 @@ const EventDetails = () => {
                   />
                   <button
                     type="button"
-                    className="button"
+                    className="button btn-add"
                     onClick={handleAddMember}
                     disabled={!canAddMember}
                     style={{
@@ -671,9 +671,7 @@ const EventDetails = () => {
                     Add Member
                   </button>
                   <button
-                    type="button"
-                    className="button"
-                    onClick={() => handleRemoveMember(index)}
+                    className="button btn-remove"
                     disabled={!member.trim()}
                     style={{
                       height: "3.5rem",
@@ -683,19 +681,26 @@ const EventDetails = () => {
                       whiteSpace: "nowrap",
                       cursor: !member.trim() ? "not-allowed" : "pointer",
                       opacity: !member.trim() ? 0.5 : 1,
-                      color: "#DA0000",
+                      color: "#FFFFFF", // warna font default
+                      backgroundColor: "#DA0000", // warna merah default
+                      transition: "background-color 0.3s, color 0.3s",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#FF0000";
-                      e.currentTarget.style.color = "#0D1A2A"; // ubah font jadi putih saat hover
+                      if (!e.currentTarget.disabled) {
+                        e.currentTarget.style.backgroundColor = "#FF0000";
+                        e.currentTarget.style.color = "#0D1A2A";
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#DA0000"; // kembali ke warna asal
-                      e.currentTarget.style.color = "#FFFFFF"; // font kembali ke asal
+                      if (!e.currentTarget.disabled) {
+                        e.currentTarget.style.backgroundColor = "#DA0000";
+                        e.currentTarget.style.color = "#FFFFFF";
+                      }
                     }}
                   >
                     Remove
                   </button>
+
                   {invalid && (
                     <p
                       style={{
@@ -762,7 +767,7 @@ const EventDetails = () => {
                   whiteSpace: "nowrap",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#BEBEBE";
+                  e.currentTarget.style.backgroundColor = "#0D1A2A";
                   e.currentTarget.style.color = "#FFFFFF"; // ubah font jadi putih saat hover
                 }}
                 onMouseLeave={(e) => {
