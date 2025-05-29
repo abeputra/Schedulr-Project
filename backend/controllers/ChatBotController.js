@@ -111,8 +111,8 @@ Jawab dalam Bahasa Indonesia.
       console.warn('Sequelize error, fallback to raw query:', sequelizeError);
       const [results] = await db.query(`
         SELECT 
-            e.id, e.title as event_title, e.organizer as event_organizer, e.description as event_description, e.invited_members, e.userId, e.creator_email,
-            s.id as subevent_id, s.title as subevent_title, s.description as subevent_description, s.additional_description, s.organizer as subevent_organizer, s.date, s.time, s.location, s.task_or_agenda, s.assignedtasks, s.assignedmembers
+            e.id, e.title as event_title,
+            s.title as subevent_title, s.date, s.time, s.location
         FROM events e
         LEFT JOIN sub_events s ON e.id = s."eventId" 
         LIMIT 10
