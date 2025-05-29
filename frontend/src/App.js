@@ -10,6 +10,7 @@ import SubEventDetails from "./components/SubEventDetails";
 import Details from "./components/Details";
 import PerSubEvent from "./components/PerSubEvent";
 import ProtectedRoute from "./components/ProtectedRoute"; // tambahkan ini
+import ChatbotPage from "./components/ChatbotPage";
 
 function App() {
   return (
@@ -29,6 +30,15 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/chatbot"
+          element={
+            <ProtectedRoute>
+              <ChatbotPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/profile"
           element={
