@@ -41,3 +41,12 @@ input::placeholder {
 body {
   padding-bottom: 5rem;
 }
+
+.modal-background {
+  background-color: rgba(20, 20, 20, 0.3) !important;
+}
+
+.modal-card {
+  background-color: #1e1e1e !important; /* atau warna lain */
+  opacity: 1 !important;
+}
