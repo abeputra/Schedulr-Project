@@ -1,7 +1,7 @@
-import express from 'express';
-import { checkConflict } from '../controllers/ChatBotController.js';
+import express from "express";
+import { checkConflict } from "../controllers/ChatBotController.js";
 
 const router = express.Router();
-router.post('/check', checkConflict);
+router.post("/check", checkConflict);
 
 export default router;
