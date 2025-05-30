@@ -22,7 +22,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
+      const res = await fetch("http://20.115.99.118:5000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -229,7 +229,7 @@ const LoginPage = () => {
           <div className="buttons is-centered">
             <a
               className="button is-light"
-              href="http://localhost:5000/auth/google"
+              href="http://20.115.99.118:5000/auth/google"
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
               <FaGoogle size={20} />
