@@ -105,7 +105,7 @@ const PerSubEvent = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          `http://localhost:5000/api/subevents/detail/${subeventId}`,
+          `http://20.115.99.118:5000/api/subevents/detail/${subeventId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -121,7 +121,7 @@ const PerSubEvent = () => {
 
         // Fetch related event data
         const eventRes = await fetch(
-          `http://localhost:5000/api/events/${data.eventId}`, // pastikan API ini tersedia
+          `http://20.115.99.118:5000/api/events/${data.eventId}`, // pastikan API ini tersedia
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -147,7 +147,7 @@ const PerSubEvent = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          `http://localhost:5000/api/subevents/invited-members/${eventId}`,
+          `http://20.115.99.118:5000/api/subevents/invited-members/${eventId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -234,7 +234,7 @@ const PerSubEvent = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `http://localhost:5000/api/subevents/detail/${subeventId}`,
+        `http://20.115.99.118:5000/api/subevents/detail/${subeventId}`,
         {
           method: "PUT",
           headers: {
