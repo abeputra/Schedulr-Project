@@ -36,7 +36,7 @@ const DashboardPage = () => {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-          "http://localhost:5000/api/subevents/my-tasks",
+          "http://20.115.99.118:5000/api/subevents/my-tasks",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -103,7 +103,7 @@ const DashboardPage = () => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/subevents/detail/${subEventId}`,
+        `http://20.115.99.118:5000/api/subevents/detail/${subEventId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -159,7 +159,7 @@ const DashboardPage = () => {
         ]);
         return;
       }
-      const response = await fetch("http://localhost:5000/api/check", {
+      const response = await fetch("http://20.115.99.118:5000/api/check", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
