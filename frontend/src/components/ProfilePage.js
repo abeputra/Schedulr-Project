@@ -89,7 +89,7 @@ const ProfilePage = () => {
       }
 
       try {
-        const res = await fetch("http://localhost:5000/api/profile", {
+        const res = await fetch("http://20.115.99.118:5000/api/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
