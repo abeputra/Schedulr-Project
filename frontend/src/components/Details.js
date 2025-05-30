@@ -112,7 +112,7 @@ const Details = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/events", {
+      const res = await fetch("http://20.115.99.118:5000/api/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +153,7 @@ const Details = () => {
         return;
       }
 
-      const res = await fetch("http://localhost:5000/api/events", {
+      const res = await fetch("http://20.115.99.118:5000/api/events", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -202,7 +202,7 @@ const Details = () => {
     const fetchInvitedMembers = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/subevents/invited-members/${eventId}`,
+          `http://20.115.99.118:5000/api/subevents/invited-members/${eventId}`,
           {
             headers: {
               Authorization: `Bearer ${yourToken}`, // pastikan ada token jika pakai verifyToken
@@ -278,7 +278,7 @@ const Details = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/subevents", {
+      const res = await fetch("http://20.115.99.118:5000/api/subevents", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
