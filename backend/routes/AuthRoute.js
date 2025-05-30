@@ -13,7 +13,7 @@ router.get(
   }),
   (req, res) => {
     const user = encodeURIComponent(JSON.stringify(req.user));
-    res.redirect(`http://localhost:3000/dashboard?user=${user}`);
+    res.redirect( process.env.BASE_URL_FRONTEND + `/dashboard?user=${user}`);
   }
 );
 

@@ -17,6 +17,7 @@ import backgroundMotif from "../assets/background-motif.png";
 
 const PerSubEvent = () => {
   const { subeventId } = useParams();
+  const [showModal, setShowModal] = useState(false);
 
   const [subEvent, setSubEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -813,137 +814,425 @@ const EditModal = ({
   return (
     <div style={styles.backdrop}>
       <div style={styles.modal}>
-        <h2>Edit Sub-Event</h2>
+        <h2
+          className="title is-4"
+          style={{
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 700,
+            fontSize: "2rem", // misalnya 2rem = 32px
+          }}
+        >
+          Edit Sub-Event
+        </h2>
+
+        <label
+          className="label"
+          style={{
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 500,
+            fontSize: "1.2rem",
+            marginBottom: "0.1rem",
+          }}
+        >
+          Sub Event Title
+        </label>
         <input
+          className="input"
           name="title"
           value={editData.title}
           onChange={handleEditChange}
-          placeholder="Title"
+          placeholder="Enter your SUb Event Title"
+          style={{
+            fontSize: "1.1rem",
+            marginTop: "0rem",
+            marginBottom: "1rem",
+            fontStyle: "italic",
+            backgroundColor: "#0D1A2A",
+          }}
         />
+        <label
+          className="label"
+          style={{
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 500,
+            fontSize: "1.2rem",
+            marginBottom: "0.1rem",
+          }}
+        >
+          Sub Event Description
+        </label>
         <textarea
+          className="textarea"
           name="description"
           value={editData.description}
           onChange={handleEditChange}
-          placeholder="Description"
+          placeholder="Enter your Sub Event Description"
+          style={{
+            fontSize: "1.1rem",
+            marginBottom: "1rem",
+            fontStyle: "italic",
+            backgroundColor: "#0D1A2A",
+          }}
         />
+        <label
+          className="label"
+          style={{
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 500,
+            fontSize: "1.2rem",
+            marginBottom: "0.1rem",
+          }}
+        >
+          Date
+        </label>
         <input
+          className="input"
           name="date"
           type="date"
           value={editData.date}
           onChange={handleEditChange}
+          style={{
+            fontSize: "1.1rem",
+            marginBottom: "1rem",
+            fontStyle: "italic",
+            backgroundColor: "#0D1A2A",
+          }}
         />
+        <label
+          className="label"
+          style={{
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 500,
+            fontSize: "1.2rem",
+            marginBottom: "0.1rem",
+          }}
+        >
+          Time
+        </label>
         <input
+          className="input"
           name="time"
           type="time"
           value={editData.time}
           onChange={handleEditChange}
+          style={{
+            fontSize: "1.1rem",
+            marginBottom: "1rem",
+            fontStyle: "italic",
+            backgroundColor: "#0D1A2A",
+          }}
         />
+        <label
+          className="label"
+          style={{
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 500,
+            fontSize: "1.2rem",
+            marginBottom: "0.1rem",
+          }}
+        >
+          Location
+        </label>
         <input
+          className="input"
           name="location"
           value={editData.location}
           onChange={handleEditChange}
           placeholder="Location"
+          style={{
+            fontSize: "1.1rem",
+            marginBottom: "1rem",
+            fontStyle: "italic",
+            backgroundColor: "#0D1A2A",
+          }}
         />
+        <label
+          className="label"
+          style={{
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 500,
+            fontSize: "1.2rem",
+            marginBottom: "0.1rem",
+          }}
+        >
+          Task or Agenda
+        </label>
 
         <select
           name="task_or_agenda"
           value={editData.task_or_agenda}
           onChange={handleEditChange}
+          className="input"
+          style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontStyle: "italic",
+            fontSize: "1.2rem",
+            height: "3.5rem",
+            borderRadius: "0.8rem",
+            marginTop: "0rem",
+            marginBottom: "1rem",
+            backgroundColor: "#0d1a2a",
+          }}
         >
           <option value="task">Task</option>
           <option value="agenda">Agenda</option>
         </select>
 
-        <h4>
-          {editData.task_or_agenda === "task" ? "Assign Task" : "Assign Member"}
-        </h4>
-        <select
-          value={selectedMember}
-          onChange={(e) => setSelectedMember(e.target.value)}
+        <h3
+          style={{
+            color: "#0D1A2A",
+            fontFamily: "'Poppins', sans-serif",
+            fontWeight: 500,
+            fontSize: "1.2rem",
+            marginTop: "1rem",
+          }}
         >
-          <option value="">Select Member</option>
-          {invitedMembers
-            .filter((em) => {
-              if (editData.task_or_agenda === "task") {
-                return !editData.assignedtasks.some((t) => t.email === em);
-              } else {
-                return !editData.assignedmembers.includes(em);
-              }
-            })
-            .map((em) => (
-              <option key={em} value={em}>
-                {em}
-              </option>
-            ))}
-        </select>
+          {editData.task_or_agenda === "task" ? "Assign Task" : "Assign Member"}
+        </h3>
 
-        {editData.task_or_agenda === "task" && (
+        <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+          {/* Member select */}
           <select
-            value={selectedTaskType}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value === "__add_new__") {
-                const newType = prompt("Enter new task type:");
-                if (newType && !taskTypes.includes(newType)) {
-                  setTaskTypes([...taskTypes, newType]);
-                  setSelectedTaskType(newType);
-                }
-              } else {
-                setSelectedTaskType(value);
-              }
+            value={selectedMember}
+            onChange={(e) => setSelectedMember(e.target.value)}
+            style={{
+              flex: 1,
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "1rem",
+              height: "3rem",
+              borderRadius: "0.6rem",
+              backgroundColor: "#FFFFFF",
+              color: "#0D1A2A",
             }}
           >
-            <option value="">Select Task Type</option>
-            {taskTypes.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-            <option value="__add_new__">+ Add new...</option>
-          </select>
-        )}
-
-        <button onClick={handleAddAssignment}>Add</button>
-
-        {editData.task_or_agenda === "task" ? (
-          <table border="1" cellPadding="8">
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Task Type</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {editData.assignedtasks.map((task, index) => (
-                <tr key={index}>
-                  <td>{task.email}</td>
-                  <td>{task.taskType}</td>
-                  <td>
-                    <button onClick={() => handleEdit(index)}>Edit</button>
-                    <button onClick={() => handleRemoveAssigned(task.email)}>
-                      Remove
-                    </button>
-                  </td>
-                </tr>
+            <option value="">Select Member</option>
+            {invitedMembers
+              .filter((em) =>
+                editData.task_or_agenda === "task"
+                  ? !editData.assignedtasks.some((t) => t.email === em)
+                  : !editData.assignedmembers.includes(em)
+              )
+              .map((em) => (
+                <option key={em} value={em}>
+                  {em}
+                </option>
               ))}
-            </tbody>
-          </table>
-        ) : (
-          <ul>
-            {editData.assignedmembers.map((email, index) => (
-              <li key={index}>
-                {email}{" "}
-                <button onClick={() => handleRemoveAssigned(email)}>
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+          </select>
 
-        <button onClick={saveChanges}>Save</button>
-        <button onClick={closeModal}>Cancel</button>
+          {/* Task type select (only for task) */}
+          {editData.task_or_agenda === "task" && (
+            <select
+              value={selectedTaskType}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "__add_new__") {
+                  const newType = prompt("Enter new task type:");
+                  if (newType && !taskTypes.includes(newType)) {
+                    setTaskTypes([...taskTypes, newType]);
+                    setSelectedTaskType(newType);
+                  }
+                } else {
+                  setSelectedTaskType(value);
+                }
+              }}
+              style={{
+                flex: 1,
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: "1rem",
+                height: "3rem",
+                borderRadius: "0.6rem",
+                backgroundColor: "#FFFFFF",
+                color: "#0D1A2A",
+              }}
+            >
+              <option value="">Select Task Type</option>
+              {taskTypes.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+              <option value="__add_new__">+ Add new...</option>
+            </select>
+          )}
+
+          <button
+            onClick={handleAddAssignment}
+            style={{
+              height: "3rem",
+              padding: "0 1rem",
+              borderRadius: "0.6rem",
+              backgroundColor: "#F38B40",
+              color: "#fff",
+              fontWeight: 500,
+              fontFamily: "'Poppins', sans-serif",
+              border: "none",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#FF6A00";
+              e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#F38B40"; // kembali ke warna asal
+              e.currentTarget.style.color = "#0D1A2A"; // font kembali ke asal
+            }}
+          >
+            Add
+          </button>
+        </div>
+
+        {/* Table Display */}
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            backgroundColor: "#0D1A2A",
+            borderRadius: "0.8rem",
+            overflow: "hidden",
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "0.95rem",
+          }}
+        >
+          <tbody>
+            {editData.task_or_agenda === "task"
+              ? editData.assignedtasks.map((task, index) => (
+                  <tr
+                    key={index}
+                    style={{ borderBottom: "1px solid #ddd", color: "#FFFFFF" }}
+                  >
+                    <td
+                      style={{
+                        padding: "0.75rem",
+                        fontSize: "1rem",
+                        marginTop: "1rem",
+                      }}
+                    >
+                      {task.email}
+                    </td>
+                    <td style={{ padding: "0.75rem", fontSize: "1rem" }}>
+                      {task.taskType}
+                    </td>
+                    <td style={{ padding: "0.75rem" }}>
+                      <button
+                        onClick={() => handleEdit(index)}
+                        style={{
+                          marginRight: "0.5rem",
+                          padding: "0.3rem 0.8rem",
+                          borderRadius: "0.4rem",
+                          border: "none",
+                          backgroundColor: "#2563eb",
+                          color: "#fff",
+                          cursor: "pointer",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: 500,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#FF6A00";
+                          e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#F38B40"; // kembali ke warna asal
+                          e.currentTarget.style.color = "#0D1A2A"; // font kembali ke asal
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleRemoveAssigned(task.email)}
+                        style={{
+                          padding: "0.3rem 0.8rem",
+                          borderRadius: "0.4rem",
+                          border: "none",
+                          backgroundColor: "#930101",
+                          color: "#fff",
+                          cursor: "pointer",
+                          fontFamily: "'Poppins', sans-serif",
+                          fontWeight: 500,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#909090";
+                          e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#930101"; // kembali ke warna asal
+                          e.currentTarget.style.color = "white"; // font kembali ke asal
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              : editData.assignedmembers.map((email, index) => (
+                  <tr key={index} style={{ borderBottom: "1px solid #ddd" }}>
+                    <td style={{ padding: "0.75rem" }}>{email}</td>
+                    <td style={{ padding: "0.75rem" }}>
+                      <button onClick={() => handleRemoveAssigned(email)}>
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+          </tbody>
+        </table>
+
+        <button
+          onClick={saveChanges}
+          style={{
+            backgroundColor: "#0D1A2A",
+            color: "white",
+            padding: "0.75rem 1.5rem",
+            border: "none",
+            borderRadius: "8px",
+            fontSize: "1rem",
+            fontFamily: "'Poppins', sans-serif",
+            cursor: "pointer",
+            transition: "background-color 0.3s ease",
+            marginTop: "1rem",
+            marginBottom: "0.5rem",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "#F38B40";
+            e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "#0D1A2A"; // kembali ke warna asal
+            e.currentTarget.style.color = "#white"; // font kembali ke asal
+          }}
+        >
+          Save
+        </button>
+        <button
+          onClick={closeModal}
+          style={{
+            backgroundColor: "#930101",
+            color: "#FFFFFF",
+            padding: "0.75rem 1.5rem",
+            border: "none",
+            borderRadius: "8px",
+            fontSize: "1rem",
+            fontFamily: "'Poppins', sans-serif",
+            cursor: "pointer",
+            transition: "background-color 0.3s ease",
+            marginLeft: "1rem",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "#909090";
+            e.currentTarget.style.color = "white"; // ubah font jadi putih saat hover
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "#930101"; // kembali ke warna asal
+            e.currentTarget.style.color = "white"; // font kembali ke asal
+          }}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );
@@ -952,21 +1241,27 @@ const EditModal = ({
 const styles = {
   backdrop: {
     position: "fixed",
-    inset: 0,
-    background: "rgba(0,0,0,0.6)",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    padding: "1rem", // supaya modal tidak menempel banget ke pinggir layar
+    zIndex: 1000,
+    overflow: "hidden", // supaya halaman belakang tidak scroll
   },
   modal: {
-    background: "#fff",
-    padding: "2rem",
-    borderRadius: 8,
-    width: "100%",
-    maxWidth: 700,
-    display: "flex",
-    flexDirection: "column",
-    gap: 12,
+    backgroundColor: "#fff",
+    borderRadius: "10px",
+    width: "90%",
+    maxWidth: "600px",
+    maxHeight: "80vh", // maksimal tinggi modal 80% viewport height
+    overflowY: "auto", // scroll jika konten terlalu tinggi
+    padding: "20px",
+    boxSizing: "border-box",
   },
 };
 

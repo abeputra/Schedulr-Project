@@ -23,6 +23,8 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [myTasks, setMyTasks] = useState([]);
   const [subEventDetails, setSubEventDetails] = useState(null); // State untuk subEvent details
+  const [chatInput, setChatInput] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
 
   const handleProfileClick = () => {
     navigate("/profile"); // Navigate to the profile page
@@ -138,6 +140,49 @@ const DashboardPage = () => {
     return [upcoming, past];
   }, [myTasks]);
 
+  const handleChatSubmit = async (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    // Contoh: mode bisa dipilih user, atau hardcode dulu untuk testing
+    const mode = "analisis"; // atau "input_event", "input_subevent"
+
+    const newMessage = { role: "user", content: chatInput };
+    setChatHistory((prev) => [...prev, newMessage]);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setChatHistory((prev) => [
+          ...prev,
+          { role: "assistant", content: "You are not logged in." },
+        ]);
+        return;
+      }
+      const response = await fetch("http://localhost:5000/api/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ message: chatInput, mode }), // <-- kirim mode
+      });
+
+      const data = await response.json();
+      setChatHistory((prev) => [
+        ...prev,
+        { role: "assistant", content: data.response || JSON.stringify(data.model, null, 2) },
+      ]);
+      setChatInput("");
+    } catch (error) {
+      console.error("Chatbot error:", error);
+      setChatHistory((prev) => [
+        ...prev,
+        { role: "assistant", content: "Sorry, there was an error." },
+      ]);
+    }
+  };
+
   return (
     <div
       style={{
@@ -216,11 +261,11 @@ const DashboardPage = () => {
             </li>
             <li style={{ marginBottom: "1.5rem" }}>
               <Link
-                to="/events"
+                to="/chatbot"
                 style={{ color: "white", textDecoration: "none" }}
               >
                 <FaCalendar style={{ marginRight: "1rem" }} />
-                Events
+                Schedulr AI
               </Link>
             </li>
             <li style={{ marginBottom: "1.5rem" }}>
@@ -251,7 +296,11 @@ const DashboardPage = () => {
               </Link>
             </li>
             <li>
-              <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+              <Link
+                to="/"
+                onClick={() => localStorage.removeItem("token")}
+                style={{ color: "white", textDecoration: "none" }}
+              >
                 <FaSignOutAlt style={{ marginRight: "1rem" }} />
                 Logout
               </Link>
@@ -821,8 +870,8 @@ const DashboardPage = () => {
                         </span>
                         <span
                           style={{
-                            fontWeight: "bold", // Menebalkan label Additional Description
-                            marginRight: "0.5rem", // Memberikan jarak antara "Additional Description" dan nilai deskripsi
+                            fontWeight: "bold",
+                            marginRight: "0.5rem",
                             color: "#FFFFFF",
                             fontSize: "1.1rem",
                           }}
