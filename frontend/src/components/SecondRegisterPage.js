@@ -79,7 +79,7 @@ const SecondRegisterPage = () => {
     };
 
     try {
-      await axios.post("http://localhost:5000/api/register", fullData);
+      await axios.post("http://20.115.99.118:5000/api/register", fullData);
 
       // ✅ Clear localStorage hanya setelah submit sukses
       localStorage.removeItem("registerStep1");
