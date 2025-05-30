@@ -102,7 +102,7 @@ const ChatbotPage = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/events", {
+      const response = await fetch("http://20.115.99.118:5000/api/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -170,7 +170,7 @@ const ChatbotPage = () => {
         ]);
         return;
       }
-      const response = await fetch("http://localhost:5000/api/check", {
+      const response = await fetch("http://20.115.99.118:5000/api/check", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
