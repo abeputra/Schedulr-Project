@@ -114,7 +114,7 @@ const EventDetails = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/events", {
+      const res = await fetch("http://20.115.99.118:5000/api/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -154,7 +154,7 @@ const EventDetails = () => {
         return;
       }
 
-      const res = await fetch("http://localhost:5000/api/events", {
+      const res = await fetch("http://20.115.99.118:5000/api/events", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
