@@ -102,7 +102,7 @@ const CreatePage = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await fetch("http://localhost:5000/api/events", {
+      const response = await fetch("http://20.115.99.118:5000/api/events", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -149,7 +149,7 @@ const CreatePage = () => {
         return;
       }
 
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+      const res = await fetch(`http://20.115.99.118:5000/api/events/${eventId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -200,7 +200,7 @@ const CreatePage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/events/${selectedEvent.id}`,
+        `http://20.115.99.118:5000/api/events/${selectedEvent.id}`,
         {
           method: "PUT",
           headers: {
