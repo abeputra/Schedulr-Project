@@ -89,7 +89,7 @@ const SubEventDetails = () => {
         }
 
         const res = await fetch(
-          `http://localhost:5000/api/subevents/${eventId}`,
+          `http://20.115.99.118:5000/api/subevents/${eventId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -124,7 +124,7 @@ const SubEventDetails = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `http://localhost:5000/api/subevents/${subeventId}`,
+        `http://20.115.99.118:5000/api/subevents/${subeventId}`,
         {
           method: "DELETE",
           headers: {
