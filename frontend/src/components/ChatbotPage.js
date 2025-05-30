@@ -217,7 +217,9 @@ const ChatbotPage = () => {
   const handleEditMemberChange = (index, value) => {
     setEditEvent((prev) => ({
       ...prev,
-      invited_members: prev.invited_members.map((m, i) => (i === index ? value : m)),
+      invited_members: prev.invited_members.map((m, i) =>
+        i === index ? value : m
+      ),
     }));
   };
 
@@ -460,7 +462,9 @@ const ChatbotPage = () => {
                           <input
                             type="email"
                             value={member}
-                            onChange={(e) => handleEditMemberChange(idx, e.target.value)}
+                            onChange={(e) =>
+                              handleEditMemberChange(idx, e.target.value)
+                            }
                             required
                             placeholder="Enter member's email"
                             style={{
@@ -485,7 +489,9 @@ const ChatbotPage = () => {
                               background: "#F38B40",
                               color: "#fff",
                               border: "none",
-                              cursor: canAddEditMember ? "pointer" : "not-allowed",
+                              cursor: canAddEditMember
+                                ? "pointer"
+                                : "not-allowed",
                             }}
                           >
                             Add
@@ -506,7 +512,10 @@ const ChatbotPage = () => {
                                 editEvent.invited_members.length === 1
                                   ? "not-allowed"
                                   : "pointer",
-                              opacity: editEvent.invited_members.length === 1 ? 0.5 : 1,
+                              opacity:
+                                editEvent.invited_members.length === 1
+                                  ? 0.5
+                                  : 1,
                             }}
                           >
                             Remove
@@ -572,7 +581,9 @@ const ChatbotPage = () => {
                   <div
                     style={{
                       marginTop: "0.5rem",
-                      color: createStatus.includes("berhasil") ? "green" : "red",
+                      color: createStatus.includes("berhasil")
+                        ? "green"
+                        : "red",
                       fontWeight: 500,
                     }}
                   >
