@@ -7,7 +7,7 @@ WORKDIR /backend
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm i
 
 # Copy seluruh source code aplikasi
 COPY . .
